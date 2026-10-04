@@ -1102,7 +1102,19 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
             response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
             response.raise_for_status()
             forecast = response.json()
-    except (httpx.HTTPError, ValueError) as exc:
+    except httpx.HTTPStatusError as exc:
+        # Keep the public response provider-agnostic, but retain enough detail
+        # in Render logs to distinguish an upstream rejection from an outage.
+        logger.warning("Open-Meteo live forecast returned HTTP %s", exc.response.status_code)
+        raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
+    except httpx.TimeoutException as exc:
+        logger.warning("Open-Meteo live forecast timed out (%s)", type(exc).__name__)
+        raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
+    except httpx.RequestError as exc:
+        logger.warning("Open-Meteo live forecast request failed (%s)", type(exc).__name__)
+        raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
+    except ValueError as exc:
+        logger.warning("Open-Meteo live forecast returned invalid JSON (%s)", type(exc).__name__)
         raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
     seasonal = None; seasonal_detail = None
     if include_seasonal:
