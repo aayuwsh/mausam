@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     allowed_origins: str = "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:5175,http://localhost:5175"
     open_meteo_seasonal_url: str = "https://seasonal-api.open-meteo.com/v1/seasonal"
     open_meteo_customer_url: str | None = None
+    weatherapi_api_key: str | None = None
     enable_open_meteo_ingestion: bool = False
     enable_public_climate_ingestion: bool = False
     copernicus_cds_url: str | None = None

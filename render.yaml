@@ -15,5 +15,7 @@ services:
         sync: false
       - key: GEMINI_API_KEY
         sync: false
+      - key: WEATHERAPI_API_KEY
+        sync: false
       - key: ALLOWED_ORIGINS
         sync: false
