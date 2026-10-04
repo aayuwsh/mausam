@@ -1,0 +1,28 @@
+{
+  "name": "mausam",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:full": "node scripts/dev-full.js",
+    "build": "vite build",
+    "api": ".venv/bin/python -m uvicorn backend.app.main:app --reload --host 127.0.0.1 --port 8000",
+    "process-data": ".venv/bin/python -m backend.app.ingest_supplied_datasets",
+    "prepare-national-data": ".venv/bin/python -m backend.app.prepare_national_boundaries",
+    "train-model": ".venv/bin/python -m backend.app.train_rainfall_model",
+    "process-national-model": "npm run prepare-national-data && npm run train-model",
+    "import-national-boundaries": ".venv/bin/python -m backend.app.import_national_boundaries",
+    "process-all-supplied": "npm run process-data && npm run prepare-national-data && npm run train-model"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.2.0",
+    "vite": "^7.3.6",
+    "typescript": "^5.5.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "lucide-react": "^0.446.0",
+    "@supabase/supabase-js": "^2.57.4"
+  },
+  "devDependencies": {}
+}

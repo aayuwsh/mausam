@@ -1,0 +1,539 @@
+serial,district_code,district_name_en,block_code,block_version,block_name_en,block_name_local
+1.0,188,Araria,1624,1,Araria,अररिया
+2.0,188,Araria,1625,1,Bhargama,भरगामा
+3.0,188,Araria,1626,2,Forbesganj,फोरबिसगंज
+4.0,188,Araria,1627,2,Jokihat,जोकीहाट
+5.0,188,Araria,1628,2,Kursakanta,कुर्साकांटा
+6.0,188,Araria,1629,2,Narpatganj,नरपतगंज
+7.0,188,Araria,1630,2,Palasi,पलासी
+8.0,188,Araria,1631,2,Raniganj,रानीगंज
+9.0,188,Araria,1632,2,Sikty,सीकटी
+10.0,611,Arwal,6505,2,Arwal,अरवल
+11.0,611,Arwal,6506,3,Kaler,कलेर
+12.0,611,Arwal,6507,1,Kapri,करपी
+13.0,611,Arwal,6509,2,Kurtha,कुर्था
+14.0,611,Arwal,6508,1,Sonbhadra-Bansi-Surajpur,सोनभद्र बंशी सुर्यापूर
+15.0,189,Aurangabad,1633,2,Aurangabad,औरंगाबाद
+16.0,189,Aurangabad,1634,2,Barun,बारुण
+17.0,189,Aurangabad,1635,1,Daudnagar,दाउदनगर
+18.0,189,Aurangabad,1636,2,Deo,देव
+19.0,189,Aurangabad,1637,2,Goh,गोह
+20.0,189,Aurangabad,1638,2,Haspura,हसपुरा
+21.0,189,Aurangabad,1639,3,Kutumba,कुटुम्बा
+22.0,189,Aurangabad,1640,1,Madanpur,मदनपुर
+23.0,189,Aurangabad,1641,2,Nabinagar,नबीनगर
+24.0,189,Aurangabad,1642,2,Obra,ओबरा
+25.0,189,Aurangabad,1643,2,Rafiganj,रफीगंज
+26.0,190,Banka,1644,2,Amarpur,
+27.0,190,Banka,1645,2,Banka,
+28.0,190,Banka,1646,2,Barahat,
+29.0,190,Banka,1647,2,Bausi,
+30.0,190,Banka,1648,2,Belhar,
+31.0,190,Banka,1649,3,Chandan,
+32.0,190,Banka,1650,2,Dhuraiya,
+33.0,190,Banka,1651,2,Fullidumar,
+34.0,190,Banka,1652,2,Katoria,
+35.0,190,Banka,1653,1,Rajaun,
+36.0,190,Banka,1654,2,Shambhuganj,
+37.0,191,Begusarai,1655,2,Bachhwara,बछवाड़ा
+38.0,191,Begusarai,1656,2,Bakhri,बखरी
+39.0,191,Begusarai,1657,3,Ballia,बलिया
+40.0,191,Begusarai,1658,2,Barauni,बरौनी
+41.0,191,Begusarai,1659,2,Begusarai,बेगूसराय
+42.0,191,Begusarai,1660,2,Bhagwanpur,भगवानपुर
+43.0,191,Begusarai,1661,1,Birpur,वीरपुर
+44.0,191,Begusarai,1662,2,Cheria Bariarpur,चेरियाबरियारपुर
+45.0,191,Begusarai,1663,2,Chhaurahi,छौड़ाही
+46.0,191,Begusarai,1664,2,Dandari,डंडारी
+47.0,191,Begusarai,1665,2,Gadhpura,गढ़पुरा
+48.0,191,Begusarai,1666,1,Khodawandpur,खोदावन्दपुर
+49.0,191,Begusarai,1667,2,Mansurchak,मंसूरचक
+50.0,191,Begusarai,1668,2,Matihani,मटिहानी
+51.0,191,Begusarai,1669,1,Nawkothi,नावकोठी
+52.0,191,Begusarai,1670,2,Sahebpur Kamal,साहेबपुरकमाल
+53.0,191,Begusarai,1671,2,Samho Akha Kurha,शाम्हो अकहा कुरहा
+54.0,191,Begusarai,1672,2,Teghra,तेघड़ा
+55.0,192,Bhagalpur,1673,4,Bihpur,
+56.0,192,Bhagalpur,1675,2,Gopalpur,
+57.0,192,Bhagalpur,1676,4,Goradih,
+58.0,192,Bhagalpur,1677,3,Ismailpur,
+59.0,192,Bhagalpur,1678,3,Jagdishpur,
+60.0,192,Bhagalpur,1674,4,Kahalgaon,Colgong
+61.0,192,Bhagalpur,1679,2,Kharik,
+62.0,192,Bhagalpur,1680,2,Narayanpur,
+63.0,192,Bhagalpur,1681,3,Nathnagar,
+64.0,192,Bhagalpur,1682,2,Naugachhia,
+65.0,192,Bhagalpur,1683,3,Pirpainti,
+66.0,192,Bhagalpur,1684,2,Rangrachowk,
+67.0,192,Bhagalpur,1685,4,Sabour,
+68.0,192,Bhagalpur,1686,3,Shahkund,
+69.0,192,Bhagalpur,1687,2,Sonhaula,
+70.0,192,Bhagalpur,1688,2,Sultanganj,
+71.0,193,Bhojpur,1689,1,Agiaon,
+72.0,193,Bhojpur,1690,2,Ara,
+73.0,193,Bhojpur,1691,2,Barhara,
+74.0,193,Bhojpur,1692,2,Behea,
+75.0,193,Bhojpur,1693,2,Charpokhari,
+76.0,193,Bhojpur,1694,2,Garhani,गड़हनी
+77.0,193,Bhojpur,1695,3,Jagdishpur,
+78.0,193,Bhojpur,1696,2,Koilwar,
+79.0,193,Bhojpur,1697,2,Piro,
+80.0,193,Bhojpur,1698,2,Sahar,सहार
+81.0,193,Bhojpur,1699,2,Sandesh,
+82.0,193,Bhojpur,1700,2,Shahpur,
+83.0,193,Bhojpur,1701,1,Tarari,
+84.0,193,Bhojpur,1702,2,Udwantnagar,उदवंतनगर
+85.0,194,Buxar,1703,2,Brahmpur,
+86.0,194,Buxar,1704,2,Buxar,
+87.0,194,Buxar,1705,2,Chakki,
+88.0,194,Buxar,1706,1,Chausa,
+89.0,194,Buxar,1707,1,Chougain,
+90.0,194,Buxar,1708,2,Dumraon,
+91.0,194,Buxar,1709,2,Itarhi,
+92.0,194,Buxar,1710,1,Kesath,
+93.0,194,Buxar,1711,1,Nawanagar,
+94.0,194,Buxar,1712,2,Rajpur,
+95.0,194,Buxar,1713,4,Simri,
+96.0,195,Darbhanga,1714,2,Alinagar,अलीनगर
+97.0,195,Darbhanga,1715,2,Bahadurpur,बहादुरपुर
+98.0,195,Darbhanga,1716,1,Baheri,बहेरी
+99.0,195,Darbhanga,1717,2,Benipur,बेनीपुर
+100.0,195,Darbhanga,1718,2,Biraul,बिरौल
+101.0,195,Darbhanga,1719,1,Darbhanga,दरभंगा
+102.0,195,Darbhanga,1720,2,Gaurabauram,गौरबौरम
+103.0,195,Darbhanga,1721,2,Ghanshyampur,घनश्यामपुर
+104.0,195,Darbhanga,1722,1,Hanuman Nagar,हनुमाननगर
+105.0,195,Darbhanga,1723,2,Hayaghat,हायाघाट
+106.0,195,Darbhanga,1724,2,Jale,जाले
+107.0,195,Darbhanga,1725,2,Keotirunway,केवटी
+108.0,195,Darbhanga,1726,2,Kiratpur,किरतपुर
+109.0,195,Darbhanga,1727,2,Kusheshwar Asthan,कुशेश्वर स्थान
+110.0,195,Darbhanga,1728,2,Kusheswar Asthan East,कुशेश्वर स्थान पूर्वी
+111.0,195,Darbhanga,1729,5,Manigachhi,मनीगाछी
+112.0,195,Darbhanga,1730,2,Singhwara,सिंघवारा
+113.0,195,Darbhanga,1731,1,Tardih,तारडीह
+114.0,196,Gaya,1732,1,Amas,आमस
+115.0,196,Gaya,1733,2,Atri,
+116.0,196,Gaya,1734,2,Bankey Bazar,
+117.0,196,Gaya,1735,1,Barachatti,बाराचट्टी
+118.0,196,Gaya,1736,2,Belaganj,
+119.0,196,Gaya,1737,2,Bodhgaya,
+120.0,196,Gaya,1738,3,Dobhi,
+121.0,196,Gaya,1739,1,Dumaria,
+122.0,196,Gaya,1740,2,Fatehpur,
+123.0,196,Gaya,1741,5,Gaya Town,
+124.0,196,Gaya,1742,2,Guraru,
+125.0,196,Gaya,1743,1,Gurua,
+126.0,196,Gaya,1744,2,Imamganj,
+127.0,196,Gaya,1745,2,Khizarsarai,खिज़रसराय
+128.0,196,Gaya,1746,2,Konch,
+129.0,196,Gaya,1747,1,Manpur,
+130.0,196,Gaya,1748,2,Mohanpur,
+131.0,196,Gaya,1749,1,Mohra,
+132.0,196,Gaya,1750,2,Neemchak Bathani,
+133.0,196,Gaya,1751,1,Paraiya,
+134.0,196,Gaya,1752,3,Sherghatty,
+135.0,196,Gaya,1753,2,Tankuppa,
+136.0,196,Gaya,1754,4,Tekari,
+137.0,196,Gaya,1755,2,Wazirganj,
+138.0,197,Gopalganj,1756,2,Baikunthpur,
+139.0,197,Gopalganj,1757,2,Barauli,
+140.0,197,Gopalganj,1758,2,Bhorey,
+141.0,197,Gopalganj,1759,2,Bijaipur,
+142.0,197,Gopalganj,1760,2,Gopalganj,
+143.0,197,Gopalganj,1761,3,Hathua,
+144.0,197,Gopalganj,1762,2,Kataiya,
+145.0,197,Gopalganj,1763,1,Kuchaikote,
+146.0,197,Gopalganj,1764,2,Manjha,
+147.0,197,Gopalganj,1765,1,Panchdeori,
+148.0,197,Gopalganj,1766,2,Phulwariya,
+149.0,197,Gopalganj,1767,1,Sidhwaliya,
+150.0,197,Gopalganj,1768,1,Thawe,
+151.0,197,Gopalganj,1769,2,Uchkagaon,
+152.0,198,Jamui,1770,2,Barhat,
+153.0,198,Jamui,1771,4,Chakai,चकाई
+154.0,198,Jamui,1772,1,Gidhor,
+155.0,198,Jamui,1773,1,Islamnagar Aliganj,
+156.0,198,Jamui,1774,2,Jamui,
+157.0,198,Jamui,1775,2,Jhajha,
+158.0,198,Jamui,1776,2,Khaira,
+159.0,198,Jamui,1777,1,Laxmipur,
+160.0,198,Jamui,1778,2,Sikandra,
+161.0,198,Jamui,1779,2,Sono,
+162.0,199,Jehanabad,1780,2,Ghoshi,घोषी
+163.0,199,Jehanabad,1781,1,Hulasganj,हुलासगंज
+164.0,199,Jehanabad,1782,2,Jehanabad,जहानाबाद
+165.0,199,Jehanabad,1783,2,Kako,काको
+166.0,199,Jehanabad,1784,1,Makhdumpur,मखदुमपुर
+167.0,199,Jehanabad,1785,1,Modanganj,मोदनगंज
+168.0,199,Jehanabad,1786,1,Ratni Faridpur,रतनीफरीदपुर
+169.0,200,Kaimur (Bhabua),1787,3,Adhaura,
+170.0,200,Kaimur (Bhabua),1788,2,Bhabua,
+171.0,200,Kaimur (Bhabua),1789,1,Bhagwanpur,
+172.0,200,Kaimur (Bhabua),1790,2,Chainpur,
+173.0,200,Kaimur (Bhabua),1791,2,Chand,
+174.0,200,Kaimur (Bhabua),1792,1,Durgawati,
+175.0,200,Kaimur (Bhabua),1793,2,Kudra,
+176.0,200,Kaimur (Bhabua),1794,2,Mohania,
+177.0,200,Kaimur (Bhabua),1795,1,Nuaon,
+178.0,200,Kaimur (Bhabua),1796,2,Ramgarh,
+179.0,200,Kaimur (Bhabua),1797,1,Rampur,
+180.0,201,Katihar,1798,2,Amdabad,
+181.0,201,Katihar,1799,2,Azamnagar,
+182.0,201,Katihar,1800,2,Balrampur,
+183.0,201,Katihar,1801,2,Barari,
+184.0,201,Katihar,1802,3,Barsoi,बारसोई
+185.0,201,Katihar,1803,1,Dandkhora,डंडखोरा
+186.0,201,Katihar,1804,2,Falka,
+187.0,201,Katihar,1805,1,Hasanganj,
+188.0,201,Katihar,1806,2,Kadwa,
+189.0,201,Katihar,1807,3,Katihar,
+190.0,201,Katihar,1808,2,Korha,
+191.0,201,Katihar,1809,2,Kursela,
+192.0,201,Katihar,1810,2,Manihari,
+193.0,201,Katihar,1811,1,Mansahi,
+194.0,201,Katihar,1812,1,Pranpur,
+195.0,201,Katihar,1813,1,Sameli,
+196.0,202,Khagaria,1814,2,Alauli,
+197.0,202,Khagaria,1815,2,Beldaur,बेलदौर
+198.0,202,Khagaria,1816,1,Chautham,
+199.0,202,Khagaria,1817,2,Gogri,
+200.0,202,Khagaria,1818,2,Khagaria,
+201.0,202,Khagaria,1819,2,Mansi,
+202.0,202,Khagaria,1820,3,Parbatta,
+203.0,203,Kishanganj,1821,1,Bahadurganj,बहादुरगंज
+204.0,203,Kishanganj,1822,1,Dighalbank,
+205.0,203,Kishanganj,1823,2,Kishanganj,
+206.0,203,Kishanganj,1824,1,Kochadhaman,कोचाधामन
+207.0,203,Kishanganj,1825,1,Pothia,
+208.0,203,Kishanganj,1826,2,Terhagachh,टेढ़ागाछ
+209.0,203,Kishanganj,1827,2,Thakurganj,
+210.0,204,Lakhisarai,1828,2,Barahiya,
+211.0,204,Lakhisarai,1829,2,Channan,
+212.0,204,Lakhisarai,1830,2,Halsi,
+213.0,204,Lakhisarai,1831,2,Lakhisarai,
+214.0,204,Lakhisarai,1832,1,Pipariya,
+215.0,204,Lakhisarai,1833,1,Ramgarh Chowk,
+216.0,204,Lakhisarai,1834,2,Surajgarha,
+217.0,205,Madhepura,1835,2,Alamnagar,आलमनगर
+218.0,205,Madhepura,1836,2,Bihariganj,बिहारीगंज
+219.0,205,Madhepura,1837,2,Chausa,चौसा
+220.0,205,Madhepura,1838,1,Gamhariya,गम्हरिया
+221.0,205,Madhepura,1839,1,Ghelarh,घेलाढ
+222.0,205,Madhepura,1840,2,Gwalpara,ग्वालपारा
+223.0,205,Madhepura,1841,2,Kumarkhand,कुमारखंड
+224.0,205,Madhepura,1842,2,Madhepura,मधेपुरा
+225.0,205,Madhepura,1843,1,Murliganj,मुरलीगंज
+226.0,205,Madhepura,1844,2,Purani,पुरैनी
+227.0,205,Madhepura,1845,1,Shankarpur,शंकरपुर
+228.0,205,Madhepura,1846,2,Singheshwar,सिंघेश्वर
+229.0,205,Madhepura,1847,2,Udakishunganj,उदाकिशुनगंज
+230.0,206,Madhubani,1848,1,Andhratharhi,अंधराठाढ़ी
+231.0,206,Madhubani,1849,1,Babu Barhi,बाबूबरही
+232.0,206,Madhubani,1850,2,Basopatti,बासोपट्टी
+233.0,206,Madhubani,1851,3,Benipatti,बेनीपट्टी
+234.0,206,Madhubani,1852,2,Bisfi,बिस्फी
+235.0,206,Madhubani,1853,2,Ghoghardiha,घोघरडीहा
+236.0,206,Madhubani,1854,1,Harlakhi,हरलाखी
+237.0,206,Madhubani,1855,2,Jainagar,जयनगर
+238.0,206,Madhubani,1856,2,Jhanjharpur,झंझारपुर
+239.0,206,Madhubani,1857,1,Kaluahi,कलुआही
+240.0,206,Madhubani,1858,2,Khajauli,खजौली
+241.0,206,Madhubani,1859,2,Ladania,लदनिया
+242.0,206,Madhubani,1860,1,Lakhnaur,लखनौर
+243.0,206,Madhubani,1861,2,Laukaha (Khutauna),खुटौना
+244.0,206,Madhubani,1862,1,Laukahi,लौकही
+245.0,206,Madhubani,1863,1,Madhepur,मधेपुर
+246.0,206,Madhubani,1865,1,Madhwapur,मधवापुर
+247.0,206,Madhubani,1866,2,Pandaul,पंडौल
+248.0,206,Madhubani,1867,2,Phulparas,फुलपरास
+249.0,206,Madhubani,1864,2,Rahika,रहिका
+250.0,206,Madhubani,1868,3,Rajnagar,राजनगर
+251.0,207,Munger,1869,2,Asarganj,
+252.0,207,Munger,1870,1,Bariyarpur,
+253.0,207,Munger,1871,2,Dharhara,
+254.0,207,Munger,1872,2,Jamalpur,
+255.0,207,Munger,1873,2,Kharagpur,
+256.0,207,Munger,1874,3,Munger Sadar,
+257.0,207,Munger,1875,2,Sangrampur,
+258.0,207,Munger,1876,2,Tarapur,
+259.0,207,Munger,1877,1,Tetiabambar,
+260.0,208,Muzaffarpur,1878,2,Aurai,
+261.0,208,Muzaffarpur,1879,1,Bandra,
+262.0,208,Muzaffarpur,1880,2,Bochahan,
+263.0,208,Muzaffarpur,1881,2,Gaighat,
+264.0,208,Muzaffarpur,1882,2,Kanti,काँटी
+265.0,208,Muzaffarpur,1883,2,Katra,
+266.0,208,Muzaffarpur,1884,2,Kurhani,
+267.0,208,Muzaffarpur,1885,2,Marwan,मड़वन
+268.0,208,Muzaffarpur,1886,2,Minapur,
+269.0,208,Muzaffarpur,1887,2,Motipur,
+270.0,208,Muzaffarpur,1888,2,Muraul,
+271.0,208,Muzaffarpur,1889,2,Mushahari,
+272.0,208,Muzaffarpur,1890,2,Paroo,
+273.0,208,Muzaffarpur,1891,2,Sahebganj,
+274.0,208,Muzaffarpur,1892,2,Sakra,
+275.0,208,Muzaffarpur,1893,2,Saraiya,
+276.0,209,Nalanda,1894,2,Asthawan,
+277.0,209,Nalanda,1895,1,Ben,
+278.0,209,Nalanda,1896,3,Biharsharif,
+279.0,209,Nalanda,1897,1,Bind,
+280.0,209,Nalanda,1898,2,Chandi,
+281.0,209,Nalanda,1899,2,Ekangarsarai,
+282.0,209,Nalanda,1900,2,Giriak,
+283.0,209,Nalanda,1901,3,Harnaut,
+284.0,209,Nalanda,1902,2,Hilsa,
+285.0,209,Nalanda,1903,1,Islampur,
+286.0,209,Nalanda,1904,1,Karai Parsurai,
+287.0,209,Nalanda,1905,1,Katrisarai,
+288.0,209,Nalanda,1906,1,Nagar Nausa,
+289.0,209,Nalanda,1907,2,Noorsarai,
+290.0,209,Nalanda,1908,2,Parbalpur,
+291.0,209,Nalanda,1909,2,Rahui,
+292.0,209,Nalanda,1910,2,Rajgir,
+293.0,209,Nalanda,1911,2,Sarmera,
+294.0,209,Nalanda,1912,1,Silao,
+295.0,209,Nalanda,1913,1,Tharthari,
+296.0,210,Nawada,1914,2,Akbarpur,
+297.0,210,Nawada,1915,2,Gobindpur,
+298.0,210,Nawada,1916,1,Hisua,
+299.0,210,Nawada,1917,1,Kashichak,
+300.0,210,Nawada,1918,1,Kawakole,
+301.0,210,Nawada,1919,2,Mescaur,
+302.0,210,Nawada,1920,1,Nardiganj,
+303.0,210,Nawada,1921,1,Narhat,
+304.0,210,Nawada,1922,1,Nawada,
+305.0,210,Nawada,1923,1,Pakri Barawan,PAKRIBARAWAN
+306.0,210,Nawada,1924,1,Rajauli,
+307.0,210,Nawada,1925,1,Roh,
+308.0,210,Nawada,1926,2,Sirdala,
+309.0,210,Nawada,1927,2,Warisaliganj,
+310.0,211,Pashchim Champaran,1928,1,Bagaha-I,बगहा-1
+311.0,211,Pashchim Champaran,1929,1,Bagaha-Ii,बगहा-2
+312.0,211,Pashchim Champaran,1930,2,Bairia,बैरिया
+313.0,211,Pashchim Champaran,1931,1,Bettiah,बेतिया
+314.0,211,Pashchim Champaran,1932,1,Bhitaha,भितहां
+315.0,211,Pashchim Champaran,1933,1,Chanpatia,चनपटिया
+316.0,211,Pashchim Champaran,1934,2,Gaunaha,गौनाहा
+317.0,211,Pashchim Champaran,1935,2,Jogapatti,योगापट्टी
+318.0,211,Pashchim Champaran,1936,1,Lauriya,लौरिया
+319.0,211,Pashchim Champaran,1937,1,Madhubani,मधुबनी
+320.0,211,Pashchim Champaran,1938,1,Mainatand,मैनाटांड
+321.0,211,Pashchim Champaran,1939,1,Majhaulia,मझौलिया
+322.0,211,Pashchim Champaran,1940,2,Narkatiaganj,नरकटियागंज
+323.0,211,Pashchim Champaran,1941,1,Nautan,नौतन
+324.0,211,Pashchim Champaran,1942,1,Piprasi,पिपरासी
+325.0,211,Pashchim Champaran,1943,2,Ramnagar,रामनगर
+326.0,211,Pashchim Champaran,1944,2,Sikta,सिकटा
+327.0,211,Pashchim Champaran,1945,1,Thakrahan,ठकराहां
+328.0,212,Patna,1946,1,Athamalgola,अथमलगोला
+329.0,212,Patna,1947,1,Bakhtiarpur,बख्तियारपुर
+330.0,212,Patna,1948,1,Barh,बाढ
+331.0,212,Patna,1949,1,Belchchi,बेलछी
+332.0,212,Patna,1950,1,Bihta,बिहटा
+333.0,212,Patna,1951,2,Bikram,बिक्रम
+334.0,212,Patna,1952,2,Daniyawan,दनियावां
+335.0,212,Patna,1953,2,Dhanarua,धनरूआ
+336.0,212,Patna,1954,3,Dinapur,दानापुर
+337.0,212,Patna,1955,1,Dulhin Bazar,दुल्हिन बाजार
+338.0,212,Patna,1956,1,Fatuha,फतुहॉ
+339.0,212,Patna,1957,2,Ghoswari,घोसवरी
+340.0,212,Patna,1958,1,Khusrupur,खुसरुपुर
+341.0,212,Patna,1959,1,Maner,मनेर
+342.0,212,Patna,1960,2,Masaurhi,मसौढ़ी
+343.0,212,Patna,1961,2,Mokama,मोकामा
+344.0,212,Patna,1962,1,Naubatpur,नौबतपुर
+345.0,212,Patna,1963,2,Paliganj,पालीगंज
+346.0,212,Patna,1964,2,Pandarak,पंडारक
+347.0,212,Patna,1965,4,Patna Sadar,पटना सदर
+348.0,212,Patna,7568,1,Patna Sadar - Didarganj,पटना सदर - दीदारगंज
+349.0,212,Patna,7566,2,Patna Sadar - Patliputra,पटना सदर- पाटलिपुत्र
+350.0,212,Patna,7567,2,Patna Sadar - Patna City,पटना सदर - पटना सिटी
+351.0,212,Patna,1966,1,Phulwari,फुलवारीशरीफ
+352.0,212,Patna,1967,2,Punpun,पुनपुन
+353.0,212,Patna,1968,3,Sampatchak,संपतचक
+354.0,213,Purbi Champaran,1969,1,Adapur,
+355.0,213,Purbi Champaran,1970,2,Areraj,
+356.0,213,Purbi Champaran,1971,2,Banjariya,
+357.0,213,Purbi Champaran,1972,1,Bankatwa,
+358.0,213,Purbi Champaran,1973,2,Chakia (Pipra),
+359.0,213,Purbi Champaran,1974,1,Chawradano,
+360.0,213,Purbi Champaran,1975,2,Chiraiya,
+361.0,213,Purbi Champaran,1976,1,Dhaka,
+362.0,213,Purbi Champaran,1977,2,Ghorasahan,
+363.0,213,Purbi Champaran,1978,2,Harsidhi,
+364.0,213,Purbi Champaran,1979,2,Kalyanpur,
+365.0,213,Purbi Champaran,1980,2,Kesaria,
+366.0,213,Purbi Champaran,1981,2,Kotwa,
+367.0,213,Purbi Champaran,1982,2,Madhuban,
+368.0,213,Purbi Champaran,1983,2,Mehsi,
+369.0,213,Purbi Champaran,1984,2,Motihari,
+370.0,213,Purbi Champaran,1985,2,Paharpur,
+371.0,213,Purbi Champaran,1986,2,Pakridayal,
+372.0,213,Purbi Champaran,1987,2,Patahi,
+373.0,213,Purbi Champaran,1988,1,Phenhara,
+374.0,213,Purbi Champaran,1989,1,Pipra Kothi,
+375.0,213,Purbi Champaran,1990,2,Ramgarhwa,
+376.0,213,Purbi Champaran,1991,2,Raxaul,
+377.0,213,Purbi Champaran,1992,2,Sangrampur,
+378.0,213,Purbi Champaran,1993,2,Sugauli,
+379.0,213,Purbi Champaran,1994,1,Tetariya,
+380.0,213,Purbi Champaran,1995,2,Turkaulia,
+381.0,214,Purnia,1996,2,Amour,
+382.0,214,Purnia,1997,2,Baisa,बैसा
+383.0,214,Purnia,1998,2,Baisi,बायसी
+384.0,214,Purnia,1999,2,Banmankhi,बनमनखी
+385.0,214,Purnia,2000,2,Barhara,बड़हरा कोठी
+386.0,214,Purnia,2001,2,Bhawanipur,
+387.0,214,Purnia,2002,2,Dagraua,
+388.0,214,Purnia,2003,3,Dhamdaha,
+389.0,214,Purnia,2004,2,Jalalgarh,
+390.0,214,Purnia,2005,2,Kasba,कसबा
+391.0,214,Purnia,2006,2,Krityanand Nagar,
+392.0,214,Purnia,2007,2,Purnia East,पूर्णिया पूर्व
+393.0,214,Purnia,2008,2,Rupouli,
+394.0,214,Purnia,2009,2,Srinagar,
+395.0,215,Rohtas,2010,3,Akorhigola,अकोढ़ीगोला
+396.0,215,Rohtas,2011,2,Bikramganj,बिक्रमगंज
+397.0,215,Rohtas,2012,3,Chenari,चेनारी
+398.0,215,Rohtas,2013,2,Dawath,दावथ
+399.0,215,Rohtas,2014,1,Dehri,डेहरी
+400.0,215,Rohtas,2015,1,Dinara,दिनारा
+401.0,215,Rohtas,2016,2,Karakat,काराकाट
+402.0,215,Rohtas,2017,2,Kargahar,करगहर
+403.0,215,Rohtas,2018,2,Kochas,कोचस
+404.0,215,Rohtas,2019,1,Nasriganj,नासरीगंज
+405.0,215,Rohtas,2020,1,Nawhatta,नौहट्टा
+406.0,215,Rohtas,2021,2,Nokha,नोखा
+407.0,215,Rohtas,2022,2,Rajpur,राजपुर
+408.0,215,Rohtas,2023,2,Rohtas,रोहतास
+409.0,215,Rohtas,2024,1,Sanjhouli,संझौली
+410.0,215,Rohtas,2025,5,Sasaram,सासाराम
+411.0,215,Rohtas,2026,2,Sheosagar,शिवसागर
+412.0,215,Rohtas,2027,1,Surajpura,सूर्यपुरा
+413.0,215,Rohtas,2028,1,Tilouthu,तिलौथू
+414.0,216,Saharsa,2029,2,Banma Itahari,बनमा इटहरी
+415.0,216,Saharsa,2030,3,Kahara,कहरा
+416.0,216,Saharsa,2031,4,Mahishi,महिषी
+417.0,216,Saharsa,2032,2,Nauhatta,नवहट्टा
+418.0,216,Saharsa,2033,1,Patarghat,पतरघट
+419.0,216,Saharsa,2034,1,Salkhua,सलखुआ
+420.0,216,Saharsa,2035,2,Sattar Kattaiya,सत्तरकटैया
+421.0,216,Saharsa,2036,1,Simri Bakhtiarpur,सिमरीबख्तियारपुर
+422.0,216,Saharsa,2037,2,Sonbarsa,सोनबरसा
+423.0,216,Saharsa,2038,2,Sour Bazar,सौरबाजार
+424.0,217,Samastipur,2039,2,Bibhutipur,विभुतिपूर
+425.0,217,Samastipur,2040,2,Bithan,बिठान
+426.0,217,Samastipur,2041,2,Dalsinghsarai,दलसिंह सराय
+427.0,217,Samastipur,2042,2,Hasanpur,हसनपुर
+428.0,217,Samastipur,2043,2,Kalyanpur,कल्याणपुर
+429.0,217,Samastipur,2044,1,Khanpur,खानपुर
+430.0,217,Samastipur,2045,2,Mohanpur,मोहनपुर
+431.0,217,Samastipur,2046,2,Mohiuddinagar,मोहिउद्दीन नगर
+432.0,217,Samastipur,2047,2,Morwa,मोरवा
+433.0,217,Samastipur,2048,2,Patori,पटोरी
+434.0,217,Samastipur,2049,1,Pusa,पूसा
+435.0,217,Samastipur,2050,2,Rosera,रोसड़ा
+436.0,217,Samastipur,2051,2,Samastipur,समस्तीपुर
+437.0,217,Samastipur,2052,2,Sarairanjan,सरायरंजन
+438.0,217,Samastipur,2053,1,Shivaji Nagar,शिवाजीनगर
+439.0,217,Samastipur,2054,1,Singhia,सिंघिया
+440.0,217,Samastipur,2055,2,Tajpur,ताजपुर
+441.0,217,Samastipur,2056,1,Ujiarpur,उजियारपुर
+442.0,217,Samastipur,2057,1,Vidyapati Nagar,विद्यापतिनगर
+443.0,217,Samastipur,2058,2,Warisnagar,वारिसनगर
+444.0,218,Saran,2059,1,Amnour,
+445.0,218,Saran,2060,2,Baniapur,
+446.0,218,Saran,2061,1,Chhapra,
+447.0,218,Saran,2062,2,Dariapur,
+448.0,218,Saran,2063,3,Dighwara,
+449.0,218,Saran,2064,1,Ekma,
+450.0,218,Saran,2065,2,Garkha,
+451.0,218,Saran,2066,1,Isuapur,
+452.0,218,Saran,2067,2,Jalalpur,
+453.0,218,Saran,2068,1,Lahladpur,
+454.0,218,Saran,2069,1,Maker,
+455.0,218,Saran,2070,2,Manjhi,
+456.0,218,Saran,2071,1,Marhaurah,
+457.0,218,Saran,2072,2,Mashrakh,
+458.0,218,Saran,2073,1,Nagra,
+459.0,218,Saran,2074,1,Panapur,
+460.0,218,Saran,2075,1,Parsa,
+461.0,218,Saran,2076,1,Revelganj,
+462.0,218,Saran,2077,2,Sonepur,
+463.0,218,Saran,2078,1,Taraiya,
+464.0,219,Sheikhpura,2079,1,Ariari,अरियरी
+465.0,219,Sheikhpura,2080,2,Barbigha,बरबीघा
+466.0,219,Sheikhpura,2081,2,Chewara,चेवाड़ा
+467.0,219,Sheikhpura,2082,2,Ghatkusumbha,घाटकुसुम्भा
+468.0,219,Sheikhpura,2084,2,Sheikhpura,शेखपुरा
+469.0,219,Sheikhpura,2083,3,Shekhopur Sarai,शेखोपुरसराय
+470.0,220,Sheohar,2085,1,Dumari Katsari,डुमरी कटसरी
+471.0,220,Sheohar,2086,2,Piprahi,पिपराही
+472.0,220,Sheohar,2087,2,Purnahiya,पुरनहिया
+473.0,220,Sheohar,2088,2,Sheohar,शिवहर
+474.0,220,Sheohar,2089,2,Tariyani,तरियानी
+475.0,221,Sitamarhi,2090,2,Bairgania,
+476.0,221,Sitamarhi,2091,2,Bajpatti,
+477.0,221,Sitamarhi,2092,2,Bathanaha,
+478.0,221,Sitamarhi,2093,2,Belsand,
+479.0,221,Sitamarhi,2094,2,Bokhra,
+480.0,221,Sitamarhi,2095,2,Choraut,
+481.0,221,Sitamarhi,2096,2,Dumra,
+482.0,221,Sitamarhi,2097,1,Majorganj,
+483.0,221,Sitamarhi,2098,1,Nanpur,
+484.0,221,Sitamarhi,2099,2,Parihar,
+485.0,221,Sitamarhi,2100,1,Parsauni,
+486.0,221,Sitamarhi,2101,2,Pupri,
+487.0,221,Sitamarhi,2102,2,Riga,
+488.0,221,Sitamarhi,2103,2,Runnisaidpur,
+489.0,221,Sitamarhi,2104,1,Sonbarsa,
+490.0,221,Sitamarhi,2105,1,Suppi,
+491.0,221,Sitamarhi,2106,1,Sursand,
+492.0,222,Siwan,2107,2,Andar,आन्दर
+493.0,222,Siwan,2108,2,Barharia,बड़हरिया
+494.0,222,Siwan,2109,2,Basantpur,बसंतपुर
+495.0,222,Siwan,2110,1,Bhagwanpur Hat,भगवानपुर हाट
+496.0,222,Siwan,2111,1,Darauli,दरौली
+497.0,222,Siwan,2112,1,Daraundha,दरौन्दा
+498.0,222,Siwan,2113,2,Goriakothi,गोरेयाकोठी
+499.0,222,Siwan,2114,1,Guthani,गुठनी
+500.0,222,Siwan,2115,2,Hasan Pura,हसनपुरा
+501.0,222,Siwan,2116,1,Hussainganj,हुसैनगंज
+502.0,222,Siwan,2117,2,Lakri Nabiganj,लकड़ी नबीगंज
+503.0,222,Siwan,2118,1,Maharajganj,महराजगंज
+504.0,222,Siwan,2119,1,Mairwa,मैरवा
+505.0,222,Siwan,2120,1,Nautan,नौतन
+506.0,222,Siwan,2121,2,Pachrukhi,पचरुखी
+507.0,222,Siwan,2122,2,Raghunathpur,रघुनाथपुर
+508.0,222,Siwan,2123,2,Siswan,सिसवन
+509.0,222,Siwan,2124,1,Siwan,सिवान सदर
+510.0,222,Siwan,2125,1,Ziradei,जीरादेई
+511.0,223,Supaul,2126,2,Basantpur,
+512.0,223,Supaul,2127,3,Chhatapur,
+513.0,223,Supaul,2128,2,Kishanpur,
+514.0,223,Supaul,2129,1,Marauna,
+515.0,223,Supaul,2130,1,Nirmali,
+516.0,223,Supaul,2131,2,Pipra,
+517.0,223,Supaul,2132,1,Pratapganj,
+518.0,223,Supaul,2133,1,Raghopur,
+519.0,223,Supaul,2134,1,Saraigarh Bhaptiyahi,
+520.0,223,Supaul,2135,2,Supaul,
+521.0,223,Supaul,2136,2,Tribeniganj,
+522.0,224,Vaishali,2137,2,Bhagwanpur,
+523.0,224,Vaishali,2138,2,Bidupur,
+524.0,224,Vaishali,2139,2,Chehrakala,
+525.0,224,Vaishali,2140,2,Desri,
+526.0,224,Vaishali,2141,2,Garaul,
+527.0,224,Vaishali,2142,2,Hajipur,
+528.0,224,Vaishali,2143,2,Jandaha,
+529.0,224,Vaishali,2144,2,Lalganj,
+530.0,224,Vaishali,2145,2,Mahnar,
+531.0,224,Vaishali,2146,2,Mahua,
+532.0,224,Vaishali,2147,2,Patedhi Belsar,
+533.0,224,Vaishali,2148,2,Patepur,
+534.0,224,Vaishali,2149,3,Raghopur,
+535.0,224,Vaishali,2150,2,Rajapakar,
+536.0,224,Vaishali,2151,2,Sahdei Buzurg,
+537.0,224,Vaishali,2152,2,Vaishali,
+"Oct 3, 2026, 1:04 AM",,,,,,

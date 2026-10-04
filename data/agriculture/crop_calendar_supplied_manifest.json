@@ -1,0 +1,18 @@
+{
+  "status": "loaded_as_source_reference",
+  "files": [
+    "east_champaran_crop_calendar_verified_with_harvest_updated.csv",
+    "muzaffarpur_crop_calendar_verified_with_harvest.csv",
+    "patna_crop_calendar_verified_with_harvest_updated.csv"
+  ],
+  "records": 30,
+  "districts": [
+    "East Champaran",
+    "Muzaffarpur",
+    "Patna"
+  ],
+  "crops": 5,
+  "harvest_windows_present": 30,
+  "duration_values_present": 9,
+  "note": "Copied supplied source CSVs unchanged to data/raw/agriculture; unified CSV preserves literal source values and has no fabricated agronomic fields. Values remain reference-only until reviewed/approved."
+}

@@ -1,0 +1,47 @@
+{
+  "status": "processed",
+  "source": {
+    "rainfall": "IMD daily gridded rainfall",
+    "era5": "supplied ERA5/ERA5-Land-labelled data; single 10:00 UTC snapshot/day"
+  },
+  "records": 295920,
+  "rejected_duplicate_records": 0,
+  "missing_by_field": {
+    "rainfall_3d": 270,
+    "rainfall_7d": 810,
+    "rainfall_14d": 1755,
+    "rainfall_30d": 3915,
+    "rainfall_anomaly": 49410,
+    "target_rain_7d": 945,
+    "target_rain_14d": 1890,
+    "target_rain_21d": 2835,
+    "target_rain_30d": 4050,
+    "dry_spell_label": 945,
+    "onset_label": 295920,
+    "break_label": 295920
+  },
+  "date_range": [
+    "2020-01-01",
+    "2025-12-31"
+  ],
+  "administrative_units_by_level": {
+    "block": 66,
+    "district": 3,
+    "subdistrict": 66
+  },
+  "administrative_units": 135,
+  "parquet": "unavailable: Unable to find a usable engine; tried using: 'pyarrow', 'fastparquet'.\nA suitable version of pyarrow or fastparquet is required for parquet support.\nTrying to import the above resulted in these errors:\n - `Import pyarrow` failed. pyarrow is required for parquet support. Use pip or conda to install the pyarrow package.\n - `Import fastparquet` failed. fastparquet is required for parquet support. Use pip or conda to install the fastparquet package.",
+  "output": "gzip-compressed CSV because no Parquet engine is installed; pyarrow dependency is declared",
+  "rain_threshold_mm": 2.5,
+  "heavy_rain_threshold_mm": 64.5,
+  "label_definitions": {
+    "heavy_rain_label": "observed date has IMD rainfall >=64.5 mm",
+    "dry_spell_label": "following 7-day observed IMD rainfall sum <2.5 mm; null unless all 7 daily values are present",
+    "onset_label": "not defined/generated: provided sources do not include all required official onset indicators",
+    "break_label": "not defined/generated: no supplied operational break-monsoon definition/source set"
+  },
+  "future_targets": "sum of the next 7/14/21/30 observed daily IMD records; null unless the full horizon exists",
+  "anomaly": "expanding same-month-day prior-year baseline only; no current/future values included",
+  "climate_index_temporal_caveat": "ONI and DMI values are aligned to their calendar month as requested; publication/release dates were not supplied, so index values must be lagged/availability-checked before real-time training to avoid publication-time leakage",
+  "onset_break": "not generated: supplied sources do not support a defensible monsoon onset/break definition"
+}

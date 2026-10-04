@@ -1,0 +1,15 @@
+# Supplied Mausam data pipeline
+
+Run `npm run process-data` from the project root. It reads only `data/raw/`, leaves source files untouched, and writes the inventory, LGD tables, monthly indices, compressed feature table, and processing report under this directory.
+
+The pipeline uses IMD daily gridded rainfall (`RAINFALL`, mm) as the rainfall source. It does not use ERA precipitation (`tp`) as a substitute. ERA variables detected in the supplied files are `t2m`, `d2m`, `swvl1`, `swvl2`, `u10`, `v10`, `sp`, and `tp`. The files contain one 10:00 UTC forecast-type snapshot per date, not hourly data; therefore temperature, dewpoint, soil moisture, wind components, and pressure remain snapshot values. The file metadata does not conclusively identify the exact ERA product/version. ERA `tp` is excluded because its forecast accumulation interval cannot safely be inferred from the supplied metadata.
+
+Rainfall and ERA grids are processed independently. Each grid cell is intersected with verified project district, block, and subdistrict polygons. Polygon intersection area with a cosine-latitude correction supplies weights; missing source cells remain missing in the aggregate. No nearest-cell assignment is used. Panchayat/Gram Panchayat LGD mappings are retained as coded CSV tables, but no matching Panchayat polygon geometry was found, so no Panchayat weather rows are created. The all-India `district_nwic.GeoJSON` is inventoried but not used for overlay because its coordinates are projected and the file itself does not declare a CRS. The existing Mausam boundary files used for processing are the project’s supported three-district Bihar extract.
+
+Rainfall rolling totals end on the feature date. The rainfall anomaly uses an expanding past-only same-month/day baseline. Future rainfall targets sum the next 7, 14, 21, or 30 complete observed daily values and remain null if any required value is missing. The dry-spell label is true when the following 7-day rainfall sum is below 2.5 mm. The observed heavy-rain label uses 64.5 mm/day. Onset and break labels are left null because the supplied inputs do not define a defensible operational event label. These are observational features and targets, not forecasts.
+
+ONI and DMI are aligned by calendar month without interpolation. Their publication dates were not supplied, so a real-time model must apply an availability lag before using a same-month value. Crop-calendar integration remains pending until its dataset is supplied.
+
+The current environment has neither `pyarrow` nor `fastparquet` and cannot reach the package index. The pipeline therefore writes gzip-compressed CSV rather than a falsely named Parquet file. `pyarrow` is declared in `backend/requirements.txt`; after it is installed, the same pipeline also emits Parquet.
+
+The Supabase migration is `backend/migrations/005_supplied_climate_observations.sql`. Apply it to the existing database, ensure supported location IDs are loaded, and configure `DATABASE_URL` before running `npm run process-data -- --import-db`. No database import is claimed until that command succeeds.

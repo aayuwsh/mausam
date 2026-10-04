@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+backend/.pytest_cache/
+data/raw/
+dataset/
+district_nwic.GeoJSON
+**/.DS_Store

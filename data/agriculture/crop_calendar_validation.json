@@ -1,0 +1,31 @@
+{
+  "records": 31,
+  "districts": [
+    "East Champaran",
+    "Muzaffarpur",
+    "Patna"
+  ],
+  "crops": [
+    "Chickpea",
+    "Lentil",
+    "Maize",
+    "Mustard",
+    "Pea",
+    "Pigeonpea",
+    "Potato",
+    "Pulses",
+    "Rice",
+    "Wheat"
+  ],
+  "duplicate_keys": [
+    [
+      "East Champaran",
+      "Maize",
+      "Kharif",
+      "Normal sowing period; Rainfed"
+    ]
+  ],
+  "records_missing_harvest_window": 31,
+  "records_missing_duration": 31,
+  "method": "Text/table extraction with pdfplumber; all window values retain source month/week precision; no year or unsupported harvest/duration values are added."
+}

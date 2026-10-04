@@ -1,0 +1,142 @@
+{
+  "dataset": "ECMWF attribution in NetCDF metadata; exact product/version not stated",
+  "source_period": "2020-01-01 through 2025-12-31",
+  "spatial_bbox": {
+    "north": 27.2,
+    "south": 24.9,
+    "west": 84.2,
+    "east": 86.3
+  },
+  "resolution_degrees": [
+    0.1,
+    0.1
+  ],
+  "temporal_resolution": "one instantaneous daily sample at 10:00 UTC",
+  "variables": {
+    "t2m": {
+      "long_name": "2 metre temperature",
+      "units": "K",
+      "grib_short_name": "2t",
+      "grib_data_type": "fc",
+      "grib_step_type": "instant"
+    },
+    "u10": {
+      "long_name": "10 metre U wind component",
+      "units": "m s**-1",
+      "grib_short_name": "10u",
+      "grib_data_type": "fc",
+      "grib_step_type": "instant"
+    },
+    "sp": {
+      "long_name": "Surface pressure",
+      "units": "Pa",
+      "grib_short_name": "sp",
+      "grib_data_type": "fc",
+      "grib_step_type": "instant"
+    },
+    "d2m": {
+      "long_name": "2 metre dewpoint temperature",
+      "units": "K",
+      "grib_short_name": "2d",
+      "grib_data_type": "fc",
+      "grib_step_type": "instant"
+    },
+    "v10": {
+      "long_name": "10 metre V wind component",
+      "units": "m s**-1",
+      "grib_short_name": "10v",
+      "grib_data_type": "fc",
+      "grib_step_type": "instant"
+    },
+    "swvl1": {
+      "long_name": "Volumetric soil water layer 1",
+      "units": "m**3 m**-3",
+      "grib_short_name": "swvl1",
+      "grib_data_type": "an",
+      "grib_step_type": "instant"
+    }
+  },
+  "source_files": 72,
+  "missing_dates": [
+    "2024-03-30",
+    "2024-03-31",
+    "2024-04-30",
+    "2024-05-30",
+    "2024-05-31",
+    "2024-06-30"
+  ],
+  "source_nonfinite_values": {
+    "v10": 0,
+    "d2m": 0,
+    "sp": 0,
+    "swvl1": 0,
+    "u10": 0,
+    "t2m": 0
+  },
+  "processing_method": "Daily raster-grid cell/polygon intersection area weighted means over verified Bihar subdistrict polygons; grid cell weights corrected by cosine(latitude). Kelvin temperatures converted to Celsius; wind speed is hypot(u10,v10); pressure remains Pa; soil moisture retains m^3 m^-3. One snapshot per date, so intraday extrema are unavailable.",
+  "location_count": 66,
+  "district_lgd_codes": [
+    "208",
+    "212",
+    "213"
+  ],
+  "processed": {
+    "records": 144672,
+    "locations": 66,
+    "date_start": "2020-01-01",
+    "date_end": "2025-12-31",
+    "missing_calendar_dates": [],
+    "null_counts": {
+      "temperature_mean_c": 396,
+      "temperature_min_c": 144672,
+      "temperature_max_c": 144672,
+      "dewpoint_temperature_c": 396,
+      "soil_moisture_mean": 396,
+      "wind_speed_mean_ms": 396,
+      "wind_speed_max_ms": 144672,
+      "surface_pressure_pa": 396
+    },
+    "unavailable_intraday_extrema": [
+      "temperature_min_c",
+      "temperature_max_c",
+      "wind_speed_max_ms"
+    ],
+    "rainfall_columns_created": false
+  },
+  "processed_at": "2026-10-01T19:18:16.055085+00:00",
+  "limitations": [
+    "Supplied files attribute data to ECMWF but do not state the exact product/version or upstream source URL.",
+    "No precipitation variable exists; no rainfall records/features are produced.",
+    "One instant per day cannot yield true daily temperature or wind minima/maxima.",
+    "Daily sample timestamp is 10:00 UTC (15:30 India Standard Time).",
+    "Historical baseline uses available 2020-2025 records, not a 30-year climatology."
+  ],
+  "local_api_index": "backend/data/processed/weather_daily.index.json",
+  "source_value_ranges": {
+    "v10": [
+      -5.694671630859375,
+      5.8145751953125
+    ],
+    "d2m": [
+      268.098388671875,
+      301.4727783203125
+    ],
+    "sp": [
+      87314.1875,
+      101882.625
+    ],
+    "swvl1": [
+      0.09942626953125,
+      0.438995361328125
+    ],
+    "u10": [
+      -10.249252319335938,
+      10.31158447265625
+    ],
+    "t2m": [
+      283.0947265625,
+      319.470458984375
+    ]
+  },
+  "source_file_count": 72
+}

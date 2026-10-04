@@ -1,0 +1,13 @@
+.git
+.venv
+node_modules
+dist
+.pytest_cache
+__pycache__
+*.py[cod]
+.env
+.env.*
+!.env.example
+data/raw
+dataset
+district_nwic.GeoJSON

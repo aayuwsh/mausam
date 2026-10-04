@@ -1,0 +1,30 @@
+{
+  "status": "processed",
+  "levels": [
+    {
+      "level": "district",
+      "source": "data/raw/administrative_boundaries/maps/districts.topo.json",
+      "output": "data/processed/administrative/districts.geojson.gz",
+      "features": 785,
+      "unique_lgd_ids": 785,
+      "crs": "OGC:CRS84 (decoded from supplied TopoJSON transform)"
+    },
+    {
+      "level": "block",
+      "source": "data/raw/administrative_boundaries/maps/blocks.topo.json",
+      "output": "data/processed/administrative/blocks.geojson.gz",
+      "features": 7143,
+      "unique_lgd_ids": 7142,
+      "crs": "OGC:CRS84 (decoded from supplied TopoJSON transform)"
+    },
+    {
+      "level": "subdistrict",
+      "source": "data/raw/administrative_boundaries/maps/subdistricts.topo.json",
+      "output": "data/processed/administrative/subdistricts.geojson.gz",
+      "features": 6469,
+      "unique_lgd_ids": 6442,
+      "crs": "OGC:CRS84 (decoded from supplied TopoJSON transform)"
+    }
+  ],
+  "location_index_count": 14397
+}

@@ -1,0 +1,257 @@
+{
+  "status": "research_candidate",
+  "operational": false,
+  "operational_status": "not_ready",
+  "operational_blockers": [
+    "The newest supplied IMD observation is older than 48 hours, so generated location outputs are archived only.",
+    "Rain/no-rain Brier score exceeds the past-only location/month climatology for at least one horizon.",
+    "No archived Open-Meteo forecast runs were supplied for a forecast-versus-observation provider backtest."
+  ],
+  "model_version": "mausam-imd-bihar-subdistrict-hgb-1.3",
+  "algorithm": "scikit-learn HistGradientBoosting; deterministic 3-day issue rows; district and sub-district spatial series",
+  "training_data": {
+    "source": "user-supplied IMD daily gridded rainfall, area-weighted separately against verified LGD district and sub-district polygons",
+    "district_scope": [
+      "East Champaran (official boundary label: Purbi Champaran)",
+      "Muzaffarpur",
+      "Patna"
+    ],
+    "date_start": "2020-01-01",
+    "date_end": "2025-12-31",
+    "raw_date_count": 2192,
+    "district_count": 3,
+    "subdistrict_count": 66,
+    "location_count": 69,
+    "finite_area_weighted_location_days": 151248,
+    "spatial_resolution_degrees": [
+      0.25,
+      0.25
+    ],
+    "source_diagnostics": {
+      "files": 6,
+      "nonfinite_source_cells": 27292671,
+      "grid_resolution_degrees": [
+        0.25,
+        0.25
+      ],
+      "date_start": "2020-01-01",
+      "date_end": "2025-12-31",
+      "dates": 2192,
+      "districts": 3,
+      "subdistricts": 66,
+      "locations": 69,
+      "records": 151248,
+      "missing_location_days": 0
+    }
+  },
+  "features": [
+    "rainfall_3d",
+    "rainfall_7d",
+    "rainfall_14d",
+    "rainfall_30d",
+    "rainfall_anomaly",
+    "consecutive_dry_days",
+    "ONI_lag1",
+    "DMI_lag1",
+    "DMI_3M_lag1",
+    "day_sin",
+    "day_cos",
+    "latitude",
+    "longitude"
+  ],
+  "climate_index_lag": "calendar-month values shifted by one full month; source publication dates unknown",
+  "evaluation": {
+    "method": "train issue dates ending before 2024-01-01; held-out chronological issue dates 2024-01-01 through 2025, horizon target stays inside held-out period",
+    "baselines": {
+      "recent_7d_rate": "Latest 7-day IMD rainfall total scaled linearly to the requested horizon; issue-date features only.",
+      "past_location_month_climatology": "Mean outcome for the same location and calendar month using training rows only."
+    },
+    "horizons": {
+      "7": {
+        "train_rows": 24978,
+        "test_rows": 16629,
+        "test_period": [
+          "2024-01-03",
+          "2025-12-23"
+        ],
+        "metrics": {
+          "rainfall_total": {
+            "mae_mm": 17.085118069474692,
+            "rmse_mm": 31.59047681695357,
+            "observations": 16629,
+            "brier_score": 0.14912439388008944,
+            "event_rate": 0.43821035540321124,
+            "roc_auc": 0.8798483584774557
+          },
+          "baselines": {
+            "recent_7d_rate": {
+              "mae_mm": 19.029661178588867,
+              "rmse_mm": 41.360987938420756,
+              "observations": 16629
+            },
+            "past_location_month_climatology": {
+              "mae_mm": 18.26833651743473,
+              "rmse_mm": 33.33680100651967,
+              "rain_event_brier_score": 0.1131215431309908,
+              "observations": 16629,
+              "training_only": true
+            }
+          },
+          "heavy_rain_event": {
+            "brier_score": 0.022227229318303687,
+            "event_rate": 0.02369354741716279,
+            "observations": 16629,
+            "baseline_brier_score": 0.025406114315056853,
+            "roc_auc": 0.8328589138900572
+          },
+          "dry_spell_event": {
+            "brier_score": 0.1550387452924985,
+            "event_rate": 0.5821757171206927,
+            "observations": 16629,
+            "roc_auc": 0.8722028179644535
+          }
+        }
+      },
+      "14": {
+        "train_rows": 24840,
+        "test_rows": 16491,
+        "test_period": [
+          "2024-01-03",
+          "2025-12-17"
+        ],
+        "metrics": {
+          "rainfall_total": {
+            "mae_mm": 28.109773314218945,
+            "rmse_mm": 50.06538265512694,
+            "observations": 16491,
+            "brier_score": 0.11717255345821048,
+            "event_rate": 0.5496937723606816,
+            "roc_auc": 0.9103850174451538
+          },
+          "baselines": {
+            "recent_7d_rate": {
+              "mae_mm": 37.69487762451172,
+              "rmse_mm": 76.12889332203312,
+              "observations": 16491
+            },
+            "past_location_month_climatology": {
+              "mae_mm": 31.40384699397825,
+              "rmse_mm": 52.64534642517964,
+              "rain_event_brier_score": 0.10181975615130422,
+              "observations": 16491,
+              "training_only": true
+            }
+          },
+          "heavy_rain_event": {
+            "brier_score": 0.04513080774292349,
+            "event_rate": 0.04651021769450003,
+            "observations": 16491,
+            "baseline_brier_score": 0.04979944038539427,
+            "roc_auc": 0.845956421676793
+          }
+        }
+      },
+      "21": {
+        "train_rows": 24702,
+        "test_rows": 16284,
+        "test_period": [
+          "2024-01-03",
+          "2025-12-08"
+        ],
+        "metrics": {
+          "rainfall_total": {
+            "mae_mm": 34.98706827942878,
+            "rmse_mm": 60.21414848709205,
+            "observations": 16284,
+            "brier_score": 0.10595292612621482,
+            "event_rate": 0.6199950872021617,
+            "roc_auc": 0.9212342299317631
+          },
+          "baselines": {
+            "recent_7d_rate": {
+              "mae_mm": 56.243927001953125,
+              "rmse_mm": 110.4670173131442,
+              "observations": 16284
+            },
+            "past_location_month_climatology": {
+              "mae_mm": 41.412437017462054,
+              "rmse_mm": 66.16712619252773,
+              "rain_event_brier_score": 0.11472519551985791,
+              "observations": 16284,
+              "training_only": true
+            }
+          },
+          "heavy_rain_event": {
+            "brier_score": 0.06816729634551041,
+            "event_rate": 0.0671211004667158,
+            "observations": 16284,
+            "baseline_brier_score": 0.07187804662409306,
+            "roc_auc": 0.8294672117398929
+          }
+        }
+      },
+      "30": {
+        "train_rows": 24495,
+        "test_rows": 16077,
+        "test_period": [
+          "2024-01-03",
+          "2025-11-29"
+        ],
+        "metrics": {
+          "rainfall_total": {
+            "mae_mm": 38.79744897312119,
+            "rmse_mm": 66.9793721271007,
+            "observations": 16077,
+            "brier_score": 0.09667361611284606,
+            "event_rate": 0.6825900354543758,
+            "roc_auc": 0.9425134198335502
+          },
+          "baselines": {
+            "recent_7d_rate": {
+              "mae_mm": 79.72238159179688,
+              "rmse_mm": 153.52037603971337,
+              "observations": 16077
+            },
+            "past_location_month_climatology": {
+              "mae_mm": 52.25075132834439,
+              "rmse_mm": 80.40039931608634,
+              "rain_event_brier_score": 0.11424094898924561,
+              "observations": 16077,
+              "training_only": true
+            }
+          },
+          "heavy_rain_event": {
+            "brier_score": 0.09167323287796567,
+            "event_rate": 0.09522920942961996,
+            "observations": 16077,
+            "baseline_brier_score": 0.09721277256199108,
+            "roc_auc": 0.8134269283157924
+          }
+        }
+      }
+    }
+  },
+  "provider_backtest": {
+    "status": "unavailable",
+    "reason": "No archived provider forecast issue/valid-time pairs were found among supplied data; live Open-Meteo retrieval is not a historical forecast archive."
+  },
+  "prediction_records": 276,
+  "prediction_origin": "2025-12-31",
+  "prediction_validity_note": "This is the newest origin supported by the supplied rainfall data. It is an archived forecast origin, not a current operational forecast; newer observations are required for current outputs.",
+  "target_definitions": {
+    "rain_probability": "total IMD rainfall over the horizon >= 2.5 mm",
+    "heavy_rain_probability": "at least one future day >= 64.5 mm (IMD heavy-rain threshold)",
+    "dry_spell_probability": "all seven future daily IMD totals < 2.5 mm/day",
+    "expected_rainfall_mm": "predicted accumulated IMD rainfall over horizon"
+  },
+  "feature_sources": [
+    "IMD daily gridded rainfall",
+    "ONI monthly index",
+    "DMI monthly index"
+  ],
+  "excluded_sources": {
+    "ERA5/ERA5-Land": "Not used as an IMD rainfall target; model rainfall targets and spatial aggregates are derived from the supplied IMD rainfall grid."
+  },
+  "crop_advisory": "not generated: available 2013 calendar is reference-only/unapproved and lacks crop rainfall thresholds",
+  "onset_break": "not modeled: no complete source-supported onset/break labels"
+}

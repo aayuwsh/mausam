@@ -1,0 +1,72 @@
+﻿district,crop,season,condition,sowing_start,sowing_end,harvest_start,harvest_end,duration_days,source,source_document,source_page,source_section,source_text,validation_status
+East Champaran,Maize,Kharif,Normal sowing period; Rainfed,"July, week 1","July, week 2",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Kharif- Rainfed | Maize: 1st week of July -
+2nd week of July",flagged_duplicate_key_keep_all_source_windows
+East Champaran,Rice,Kharif,Normal sowing period; Rainfed,"July, week 1","July, week 2",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Kharif- Rainfed | Rice: 1st week of July -
+2nd week of July",source_checked
+East Champaran,Pulses,Kharif,Normal sowing period; Rainfed,June,July,,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),Kharif- Rainfed | Pulses: June- July,source_checked
+East Champaran,Maize,Kharif,Normal sowing period; Rainfed,"May, week 3","June, week 2",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Kharif- Rainfed | Maize: 3rd week of May-2nd
+week of June",flagged_duplicate_key_keep_all_source_windows
+East Champaran,Pulses,Kharif,Normal sowing period; Irrigated,July,August,,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),Kharif-Irrigated | Pulses: July - August,source_checked
+East Champaran,Maize,Rabi,Normal sowing period; Rainfed,"October, week 2","November, week 2",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Rabi- Rainfed | Maize: 2nd week of October -
+2nd week of November",source_checked
+East Champaran,Wheat,Rabi,Normal sowing period; Irrigated,"November, week 2","December, week 2",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Wheat: 2nd week of
+November - 2nd
+week of
+December",source_checked
+East Champaran,Pulses,Rabi,Normal sowing period; Irrigated,October,November,,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Pulses: October-
+November",source_checked
+East Champaran,Maize,Rabi,Normal sowing period; Irrigated,"October, week 2","November, week 3",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Maize: 2nd week of October-
+3rd week of November",source_checked
+East Champaran,Maize,Summer,Normal sowing period,"February, week 2","April, week 3",,,,Agriculture Contingency Plan for District: East Champaran (2013),BR16_East Champaran_28.12.2013.pdf,6,1.12 Sowing window for major field crops (normal sowing period),"Summer | Maize: 2nd week of February-
+3rd week of April",source_checked
+Muzaffarpur,Rice,Kharif,Normal sowing period; Rainfed,"June, week 2","June, week 2",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),Kharif- Rainfed | Rice: 2nd week of June,source_checked
+Muzaffarpur,Pigeonpea,Kharif,Normal sowing period; Rainfed,"June, week 3","July, week 2",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Kharif- Rainfed | Pigeonpea: 3rd week of June -
+2nd week of July",source_checked
+Muzaffarpur,Maize,Kharif,Normal sowing period; Rainfed,"May, week 3","June, week 2",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Kharif- Rainfed | Maize: 3rd week of May-2nd week
+of June",source_checked
+Muzaffarpur,Rice,Kharif,Normal sowing period; Irrigated,"June, week 2","June, week 3",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Kharif-Irrigated | Rice: 2nd week of June -
+3rd week of June",source_checked
+Muzaffarpur,Wheat,Rabi,Normal sowing period; Rainfed,"October, week 4","November, week 1",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Rabi- Rainfed | Wheat: 4th week of October -
+1st week of November",source_checked
+Muzaffarpur,Lentil,Rabi,Normal sowing period; Rainfed,"October, week 2","November, week 1",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Rabi- Rainfed | Lentil: 2nd week of
+October - 1st week
+of November",source_checked
+Muzaffarpur,Wheat,Rabi,Normal sowing period; Irrigated,"November, week 2","December, week 2",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Wheat: 2nd week of November -
+2nd week of December",source_checked
+Muzaffarpur,Maize,Rabi,Normal sowing period; Irrigated,"October, week 2","November, week 3",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Maize: 2nd week of October -
+3rd week of November",source_checked
+Muzaffarpur,Lentil,Rabi,Normal sowing period; Irrigated,"October, week 2","November, week 2",,,,Agriculture Contingency Plan for District: Muzaffarpur (2013),BR26_Muzaffarpur_28.12.2013.pdf,7,1.12 Sowing window for major field crops (normal sowing period),"Rabi-Irrigated | Lentil: 2nd week of Oct. –
+2nd week of Nov.",source_checked
+Patna,Pigeonpea,Kharif,Normal sowing period; Rainfed,"May, week 1","July, week 4",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,6,1.12 Sowing window for major field crops,"Kharif- Rainfed | Pigeonpea: 1st week of May -
+4th week of July",source_checked
+Patna,Pigeonpea,Kharif,Normal sowing period; Irrigated,"June, week 1","July, week 2",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,6,1.12 Sowing window for major field crops,"Kharif-Irrigated | Pigeonpea: 1st week of June –
+2nd week of July",source_checked
+Patna,Maize,Kharif,Normal sowing period; Irrigated,"May, week 4","June, week 2",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,6,1.12 Sowing window for major field crops,"Kharif-Irrigated | Maize: 4th week of May -
+2nd week of June",source_checked
+Patna,Rice,Kharif,Normal sowing period; Irrigated,"May, week 4","July, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,6,1.12 Sowing window for major field crops,"Kharif-Irrigated | Rice: 4th week of May -
+1st week of July",source_checked
+Patna,Chickpea,Rabi,Normal sowing period; Rainfed,"October, week 1","November, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi- Rainfed | Chickpea: 1st week of October - 1st
+week of November",source_checked
+Patna,Lentil,Rabi,Normal sowing period; Rainfed,"October, week 1","November, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi- Rainfed | Lentil: 1st week of
+October - 1st week
+of November",source_checked
+Patna,Mustard,Rabi,Normal sowing period; Rainfed,"October, week 1","November, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi- Rainfed | Mustard: 1st week of
+October - 1st
+week of
+November",source_checked
+Patna,Maize,Rabi,Normal sowing period; Irrigated,"October, week 1","November, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi-Irrigated | Maize: 1st week of
+October - 1st week
+of November",source_checked
+Patna,Wheat,Rabi,Normal sowing period; Irrigated,"November, week 1","December, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi-Irrigated | Wheat: 1st week of
+November - 1st
+week of
+December",source_checked
+Patna,Mustard,Rabi,Normal sowing period; Irrigated,October 10,October 20,,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi-Irrigated | Mustard: 10th October –
+20th October",source_checked
+Patna,Potato,Rabi,Normal sowing period; Irrigated,"September, week 1","October, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi-Irrigated | Potato: 1st week of
+September - 1st
+week of October",source_checked
+Patna,Pea,Rabi,Normal sowing period; Irrigated,"September, week 1","October, week 1",,,,Agriculture Contingency Plan for District: Patna (2013),BR27_Patna_28.12.2013.pdf,7,1.12 Sowing window for major field crops,"Rabi-Irrigated | Pea: 1st week of
+September - 1st
+week of
+October",source_checked

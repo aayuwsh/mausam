@@ -1,0 +1,78 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: mausam
+      POSTGRES_USER: mausam
+      POSTGRES_PASSWORD: ${MAUSAM_DB_PASSWORD:-mausam_local_dev}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations/001_initial_schema.sql:/docker-entrypoint-initdb.d/001_initial_schema.sql:ro
+      - ./backend/migrations/002_mausam_three_district_geography.sql:/docker-entrypoint-initdb.d/002_mausam_three_district_geography.sql:ro
+      - ./backend/migrations/003_weather_daily.sql:/docker-entrypoint-initdb.d/003_weather_daily.sql:ro
+      - ./backend/migrations/004_crop_calendar_sources.sql:/docker-entrypoint-initdb.d/004_crop_calendar_sources.sql:ro
+      - ./backend/migrations/005_supplied_climate_observations.sql:/docker-entrypoint-initdb.d/005_supplied_climate_observations.sql:ro
+      - ./backend/migrations/006_nationwide_locations.sql:/docker-entrypoint-initdb.d/006_nationwide_locations.sql:ro
+      - ./backend/migrations/007_limit_supported_districts.sql:/docker-entrypoint-initdb.d/007_limit_supported_districts.sql:ro
+      - ./backend/migrations/008_farm_journal.sql:/docker-entrypoint-initdb.d/008_farm_journal.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mausam -d mausam"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql://mausam:${MAUSAM_DB_PASSWORD:-mausam_local_dev}@db:5432/mausam
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./data:/app/data:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URL: postgresql://mausam:${MAUSAM_DB_PASSWORD:-mausam_local_dev}@db:5432/mausam
+      REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./backend/data:/app/backend/data
+      - ./data:/app/data:ro
+    command: ["celery", "-A", "backend.app.tasks.celery_app", "worker", "--beat", "--loglevel=INFO"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  redis_data:
