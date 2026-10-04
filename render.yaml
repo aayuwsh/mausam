@@ -2,7 +2,7 @@ services:
   - type: web
     name: mausam-api
     runtime: docker
-    plan: starter
+    plan: free
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     healthCheckPath: /api/v1/health
