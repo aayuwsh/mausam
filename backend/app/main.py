@@ -1071,10 +1071,9 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     if cached and now_monotonic - cached["fetched_at"] < 600:
         return {**cached["payload"], "cache": "hit"}
 
-    # Respect upstream throttling and avoid sending a burst of repeated calls
-    # while the provider is rejecting this location's requests.
-    backoffs = getattr(app.state, "live_weather_backoffs", {})
-    retry_at = backoffs.get(cache_key, 0)
+    # Open-Meteo rate limits the service's upstream traffic, not only a page or
+    # district. Share the cooldown across locations and seasonal query modes.
+    retry_at = getattr(app.state, "open_meteo_forecast_retry_at", 0)
     if now_monotonic < retry_at:
         retry_after = max(1, int(retry_at - now_monotonic))
         raise HTTPException(
@@ -1141,8 +1140,7 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
                 cooldown = min(3600, max(60, int(raw_retry_after)))
             except ValueError:
                 cooldown = 300
-            backoffs[cache_key] = time.monotonic() + cooldown
-            app.state.live_weather_backoffs = backoffs
+            app.state.open_meteo_forecast_retry_at = time.monotonic() + cooldown
             logger.warning("Open-Meteo live forecast throttled; pausing requests for %s seconds", cooldown)
         raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
     except httpx.TimeoutException as exc:
@@ -1184,7 +1182,6 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
             "detail": "Provider current conditions and 7-day forecast at the verified area representative point. These are not MAUSAM model predictions."}
     cache[cache_key] = {"fetched_at": time.monotonic(), "payload": result}
     app.state.live_weather_cache = cache
-    app.state.live_weather_backoffs = backoffs
     return {**result, "cache": "miss"}
 
 
