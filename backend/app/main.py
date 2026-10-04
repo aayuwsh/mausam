@@ -1061,6 +1061,28 @@ async def weather_source(location_id: str):
 @app.get("/api/v1/locations/{location_id}/live-weather")
 async def live_location_weather(location_id: str, include_seasonal: bool = Query(True)):
     """Fetch current conditions and a short provider forecast for a verified Bihar area."""
+    # Reuse fresh provider data across page refreshes and visitors. Open-Meteo's
+    # public endpoint is rate limited, and current weather does not need a new
+    # upstream request for every browser render.
+    cache_key = (location_id, include_seasonal)
+    cache = getattr(app.state, "live_weather_cache", {})
+    now_monotonic = time.monotonic()
+    cached = cache.get(cache_key)
+    if cached and now_monotonic - cached["fetched_at"] < 600:
+        return {**cached["payload"], "cache": "hit"}
+
+    # Respect upstream throttling and avoid sending a burst of repeated calls
+    # while the provider is rejecting this location's requests.
+    backoffs = getattr(app.state, "live_weather_backoffs", {})
+    retry_at = backoffs.get(cache_key, 0)
+    if now_monotonic < retry_at:
+        retry_after = max(1, int(retry_at - now_monotonic))
+        raise HTTPException(
+            503,
+            "The live weather provider is rate-limiting requests. Please try again shortly.",
+            headers={"Retry-After": str(retry_after)},
+        )
+
     folder = Path(__file__).resolve().parents[1] / "data/geography/mausam/bihar"
     try:
         districts = json.loads((folder / "districts.geojson").read_text(encoding="utf-8"))["features"]
@@ -1098,14 +1120,30 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
         "forecast_days": 16, "timezone": "Asia/Kolkata", "wind_speed_unit": "kmh",
     }
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
-            response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
-            response.raise_for_status()
-            forecast = response.json()
+        forecast_cache = getattr(app.state, "open_meteo_live_forecasts", {})
+        forecast_entry = forecast_cache.get(location_id)
+        if forecast_entry and time.monotonic() - forecast_entry["fetched_at"] < 600:
+            forecast = forecast_entry["payload"]
+        else:
+            async with httpx.AsyncClient(timeout=15) as client:
+                response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
+                response.raise_for_status()
+                forecast = response.json()
+            forecast_cache[location_id] = {"fetched_at": time.monotonic(), "payload": forecast}
+            app.state.open_meteo_live_forecasts = forecast_cache
     except httpx.HTTPStatusError as exc:
         # Keep the public response provider-agnostic, but retain enough detail
         # in Render logs to distinguish an upstream rejection from an outage.
         logger.warning("Open-Meteo live forecast returned HTTP %s", exc.response.status_code)
+        if exc.response.status_code == 429:
+            raw_retry_after = exc.response.headers.get("Retry-After", "")
+            try:
+                cooldown = min(3600, max(60, int(raw_retry_after)))
+            except ValueError:
+                cooldown = 300
+            backoffs[cache_key] = time.monotonic() + cooldown
+            app.state.live_weather_backoffs = backoffs
+            logger.warning("Open-Meteo live forecast throttled; pausing requests for %s seconds", cooldown)
         raise HTTPException(503, "The live weather provider is unavailable; no weather values were substituted.") from exc
     except httpx.TimeoutException as exc:
         logger.warning("Open-Meteo live forecast timed out (%s)", type(exc).__name__)
@@ -1138,12 +1176,16 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
         for days in (21,30):
             if len(values)>=days and len(dates)>=days and all(v is not None for v in values[:days]):
                 horizons.append({"days":days,"rainfall_mm":float(sum(values[:days])),"provider":"Open-Meteo ECMWF EC46 ensemble","resolution":"36 km ensemble area outlook; not bias-corrected","forecast_start":dates[0]})
-    return {"status": "available", "location": {"id": location_id, "name": props.get("name"), "level": level,
+    result = {"status": "available", "location": {"id": location_id, "name": props.get("name"), "level": level,
             "district_name": props.get("district") or (props.get("name") if level == "district" else None),
             "latitude": point.y, "longitude": point.x}, "provider": "Open-Meteo", "forecast": forecast,
             "horizons": horizons,"seasonal_forecast":({"provider":"Open-Meteo ECMWF EC46","start":(seasonal.get("daily",{}).get("time") or [None])[0],"end":(seasonal.get("daily",{}).get("time") or [None])[-1]} if seasonal else None),"seasonal_detail":seasonal_detail,
             "retrieved_at": datetime.now(timezone.utc).isoformat(),
             "detail": "Provider current conditions and 7-day forecast at the verified area representative point. These are not MAUSAM model predictions."}
+    cache[cache_key] = {"fetched_at": time.monotonic(), "payload": result}
+    app.state.live_weather_cache = cache
+    app.state.live_weather_backoffs = backoffs
+    return {**result, "cache": "miss"}
 
 
 @app.get("/api/v1/locations/{location_id}/historical-weather")
