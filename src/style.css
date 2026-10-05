@@ -943,3 +943,9 @@ img,svg,video,canvas{max-width:100%}
   .dashboard-horizons{grid-template-columns:minmax(0,1fr)}
   .forecast-alert-actions>*{flex-basis:100%}
 }
+
+/* Keep the signed-in destination visible without displacing the landing controls. */
+.welcome-account-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:0 13px;border:1px solid #d7ddd3;border-radius:999px;background:transparent;color:#3d493b;font:500 12px var(--display);white-space:nowrap;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.welcome-account-link:hover{background:#edf2e8;border-color:#c2d1b8;color:#273528}
+.welcome-account-link:focus-visible{outline:2px solid #718c62;outline-offset:2px}
+@media(max-width:600px){.welcome-account-link{min-height:36px;padding:0 9px;font-size:11px}.welcome-account-link svg{width:14px;height:14px}}
