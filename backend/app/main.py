@@ -90,6 +90,33 @@ _assistant_requests: dict[str, list[float]] = {}
 _assistant_context_cache: dict[str, tuple[float, dict[str, Any]]] = {}
 _assistant_speech_requests: dict[str, list[float]] = {}
 _farm_ai_requests: dict[str, list[float]] = {}
+# Weather page loads can arrive together (for example, multiple visitors opening
+# the landing page). Keep one upstream request in flight per location per worker.
+_live_weather_locks: dict[str, asyncio.Lock] = {}
+_seasonal_weather_locks: dict[str, asyncio.Lock] = {}
+_open_meteo_request_lock = asyncio.Lock()
+_open_meteo_next_request_at = 0.0
+_LIVE_WEATHER_CACHE_TTL = 900
+_LIVE_WEATHER_STALE_MAX_AGE = 6 * 60 * 60
+_SEASONAL_WEATHER_CACHE_TTL = 6 * 60 * 60
+
+
+def _weather_lock(locks: dict[str, asyncio.Lock], key: str) -> asyncio.Lock:
+    lock = locks.get(key)
+    if lock is None:
+        lock = asyncio.Lock()
+        locks[key] = lock
+    return lock
+
+
+async def _pace_open_meteo_requests() -> None:
+    """Space cache-miss requests to avoid burst traffic from a busy worker."""
+    global _open_meteo_next_request_at
+    async with _open_meteo_request_lock:
+        delay = _open_meteo_next_request_at - time.monotonic()
+        if delay > 0:
+            await asyncio.sleep(delay)
+        _open_meteo_next_request_at = time.monotonic() + 0.25
 
 
 async def _gemini_generate_content(httpx, *, system_instruction: str, contents: list[dict[str, Any]], generation_config: dict[str, Any]) -> tuple[dict[str, Any], str]:
@@ -1175,14 +1202,18 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     cache = getattr(app.state, "live_weather_cache", {})
     now_monotonic = time.monotonic()
     cached = cache.get(cache_key)
-    if cached and now_monotonic - cached["fetched_at"] < 600:
+    cached_age = now_monotonic - cached["fetched_at"] if cached else None
+    if cached and cached_age < _LIVE_WEATHER_CACHE_TTL:
         return {**cached["payload"], "cache": "hit"}
+    # Serve the last known forecast if the provider is throttling or offline.
+    # Preserve its original retrieved_at so the UI does not imply it is fresh.
+    stale_payload = cached["payload"] if cached and cached_age < _LIVE_WEATHER_STALE_MAX_AGE else None
 
     # Open-Meteo rate limits the service's upstream traffic, not only a page or
     # district. Share the cooldown across locations and seasonal query modes.
     retry_at = getattr(app.state, "open_meteo_forecast_retry_at", 0)
     open_meteo_cooling_down = now_monotonic < retry_at
-    if open_meteo_cooling_down and not settings.weatherapi_api_key:
+    if open_meteo_cooling_down and not settings.weatherapi_api_key and stale_payload is None:
         retry_after = max(1, int(retry_at - now_monotonic))
         raise HTTPException(
             503,
@@ -1229,19 +1260,24 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     provider = "Open-Meteo"
     forecast = None
     try:
-        forecast_cache = getattr(app.state, "open_meteo_live_forecasts", {})
-        forecast_entry = forecast_cache.get(location_id)
-        if open_meteo_cooling_down:
-            forecast = None
-        elif forecast_entry and time.monotonic() - forecast_entry["fetched_at"] < 600:
-            forecast = forecast_entry["payload"]
-        else:
-            async with httpx.AsyncClient(timeout=15) as client:
-                response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
-                response.raise_for_status()
-                forecast = response.json()
-            forecast_cache[location_id] = {"fetched_at": time.monotonic(), "payload": forecast}
-            app.state.open_meteo_live_forecasts = forecast_cache
+        forecast_lock = _weather_lock(_live_weather_locks, location_id)
+        async with forecast_lock:
+            # Re-read after acquiring the lock: another concurrent request may
+            # already have filled the location cache while this request waited.
+            forecast_cache = getattr(app.state, "open_meteo_live_forecasts", {})
+            forecast_entry = forecast_cache.get(location_id)
+            if time.monotonic() < getattr(app.state, "open_meteo_forecast_retry_at", 0):
+                forecast = None
+            elif forecast_entry and time.monotonic() - forecast_entry["fetched_at"] < _LIVE_WEATHER_CACHE_TTL:
+                forecast = forecast_entry["payload"]
+            else:
+                await _pace_open_meteo_requests()
+                async with httpx.AsyncClient(timeout=15) as client:
+                    response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
+                    response.raise_for_status()
+                    forecast = response.json()
+                forecast_cache[location_id] = {"fetched_at": time.monotonic(), "payload": forecast}
+                app.state.open_meteo_live_forecasts = forecast_cache
     except httpx.HTTPStatusError as exc:
         # Keep the public response provider-agnostic, but retain enough detail
         # in Render logs to distinguish an upstream rejection from an outage.
@@ -1269,16 +1305,34 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     if forecast is None:
         forecast = await _weatherapi_live_forecast(httpx, point.y, point.x)
         if forecast is None:
+            if stale_payload is not None:
+                return {**stale_payload, "cache": "stale"}
             raise HTTPException(503, "Live weather is unavailable from Open-Meteo and the configured fallback provider.")
         provider = "WeatherAPI.com"
     seasonal = None; seasonal_detail = None
     if include_seasonal and provider == "Open-Meteo":
         try:
-            seasonal_params={"latitude":point.y,"longitude":point.x,"models":"ecmwf_ec46","forecast_days":30,
-                             "daily":"precipitation_sum","timezone":"Asia/Kolkata"}
-            async with httpx.AsyncClient(timeout=20) as client:
-                seasonal_response=await client.get("https://seasonal-api.open-meteo.com/v1/seasonal",params=seasonal_params)
-                seasonal_response.raise_for_status(); seasonal=seasonal_response.json()
+            seasonal_cache = getattr(app.state, "open_meteo_seasonal_forecasts", {})
+            seasonal_entry = seasonal_cache.get(location_id)
+            if seasonal_entry and time.monotonic() - seasonal_entry["fetched_at"] < _SEASONAL_WEATHER_CACHE_TTL:
+                seasonal = seasonal_entry["payload"]
+            else:
+                async with _weather_lock(_seasonal_weather_locks, location_id):
+                    # Recheck after waiting so concurrent page loads share the
+                    # same seasonal provider response as well.
+                    seasonal_cache = getattr(app.state, "open_meteo_seasonal_forecasts", {})
+                    seasonal_entry = seasonal_cache.get(location_id)
+                    if seasonal_entry and time.monotonic() - seasonal_entry["fetched_at"] < _SEASONAL_WEATHER_CACHE_TTL:
+                        seasonal = seasonal_entry["payload"]
+                    else:
+                        seasonal_params={"latitude":point.y,"longitude":point.x,"models":"ecmwf_ec46","forecast_days":30,
+                                         "daily":"precipitation_sum","timezone":"Asia/Kolkata"}
+                        await _pace_open_meteo_requests()
+                        async with httpx.AsyncClient(timeout=20) as client:
+                            seasonal_response=await client.get("https://seasonal-api.open-meteo.com/v1/seasonal",params=seasonal_params)
+                            seasonal_response.raise_for_status(); seasonal=seasonal_response.json()
+                        seasonal_cache[location_id] = {"fetched_at": time.monotonic(), "payload": seasonal}
+                        app.state.open_meteo_seasonal_forecasts = seasonal_cache
         except (httpx.HTTPError,ValueError) as exc:
             seasonal_detail=f"ECMWF EC46 long-range data unavailable: {exc}"
     else:
