@@ -6,6 +6,7 @@ import gzip
 import calendar as calendar_module
 import logging
 from datetime import date, datetime, timedelta, timezone
+from functools import lru_cache
 import json
 import math
 from pathlib import Path
@@ -866,11 +867,48 @@ def supported_national_locations() -> list[dict[str, Any]]:
     return [unit for unit in units if unit.get("id") in supported_ids]
 
 
+@lru_cache(maxsize=3)
 def national_geojson(level: str) -> dict[str, Any] | None:
-    path = Path(__file__).resolve().parents[2] / f"data/processed/administrative/{level}s.geojson.gz"
+    """Return the supported Bihar boundary layer using its national LGD IDs.
+
+    The API only serves three Bihar districts. Reading the nationwide compressed
+    GeoJSON layers inflated tens of megabytes of geometry on every request and
+    could exhaust the memory available to the free Render instance. The compact
+    supplied Bihar layers contain the same supported units; normalize their IDs
+    to the LGD IDs used by the API before returning them.
+    """
+    if level not in {"district", "block", "subdistrict"}:
+        return None
+    path = Path(__file__).resolve().parents[1] / f"data/geography/mausam/bihar/{level}s.geojson"
     try:
-        with gzip.open(path, "rt", encoding="utf-8") as handle:
-            return json.load(handle)
+        with path.open("r", encoding="utf-8") as handle:
+            collection = json.load(handle)
+        for feature in collection.get("features", []):
+            props = feature.get("properties", {})
+            state_code = str(props.get("state_code") or props.get("state_lgd") or "10")
+            district_code = str(props.get("district_code") or props.get("dist_lgd") or props.get("lgd") or "")
+            source_code = str(props.get("source_code") or props.get("lgd") or "")
+            if not district_code or (level != "district" and not source_code):
+                continue
+            if level == "district":
+                props["id"] = f"IN-LGD-D-{state_code}-{district_code}"
+                props["parent_id"] = f"IN-LGD-ST-{state_code}"
+            elif level == "subdistrict":
+                props["id"] = f"IN-LGD-S-{state_code}-{district_code}-{source_code}"
+                props["parent_id"] = f"IN-LGD-D-{state_code}-{district_code}"
+            else:
+                props["id"] = f"IN-LGD-B-{state_code}-{district_code}-{source_code}"
+                props["parent_id"] = f"IN-LGD-D-{state_code}-{district_code}"
+            props["level"] = level
+            props["mausam_level"] = level
+            props["state_code"] = state_code
+            props["district_code"] = district_code
+            props["source_code"] = source_code
+        collection["features"] = [
+            feature for feature in collection.get("features", [])
+            if str(feature.get("properties", {}).get("id", "")).startswith("IN-LGD-")
+        ]
+        return collection
     except (OSError, json.JSONDecodeError):
         return None
 
