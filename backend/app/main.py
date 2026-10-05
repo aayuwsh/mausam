@@ -1311,6 +1311,10 @@ async def _openweather_live_forecast(httpx, latitude: float, longitude: float):
                             "precipitation_sum": "mm", "wind_speed_10m_max": "km/h"},
         }
         return forecast
+    except httpx.HTTPStatusError as exc:
+        # Log only the upstream status; never log the request URL or API key.
+        logger.warning("OpenWeather fallback returned HTTP %s", exc.response.status_code)
+        return None
     except (httpx.HTTPError, ValueError, KeyError, TypeError, OverflowError) as exc:
         logger.warning("OpenWeather fallback failed (%s)", type(exc).__name__)
         return None
@@ -1337,7 +1341,10 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     # district. Share the cooldown across locations and seasonal query modes.
     retry_at = getattr(app.state, "open_meteo_forecast_retry_at", 0)
     open_meteo_cooling_down = now_monotonic < retry_at
-    if open_meteo_cooling_down and not settings.weatherapi_api_key and stale_payload is None:
+    if (open_meteo_cooling_down
+            and not settings.openweather_api_key
+            and not settings.weatherapi_api_key
+            and stale_payload is None):
         retry_after = max(1, int(retry_at - now_monotonic))
         raise HTTPException(
             503,
