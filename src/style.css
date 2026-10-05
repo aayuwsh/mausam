@@ -953,3 +953,5 @@ img,svg,video,canvas{max-width:100%}
 .welcome-shortcuts button{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 10px;border:1px solid transparent;border-radius:999px;background:transparent;color:#62705d;font:500 11px var(--display);cursor:pointer}
 .welcome-shortcuts button:hover{background:#edf2e8;border-color:#d7e0d2;color:#344633}
 .welcome-shortcuts button:focus-visible{outline:2px solid #718c62;outline-offset:2px}
+.account-error .auth-text-button{display:flex;align-items:center;gap:7px;margin-top:10px;padding:0;border:0;background:transparent;color:inherit;font-weight:600;text-align:left;cursor:pointer}
+.account-error .auth-text-button small{display:block;font-size:11px;font-weight:400;line-height:1.45;opacity:.85}
