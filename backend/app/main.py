@@ -1192,6 +1192,130 @@ async def _weatherapi_live_forecast(httpx, latitude: float, longitude: float):
         return None
 
 
+def _openweather_wmo_code(code: int | None) -> int | None:
+    """Map OpenWeather condition identifiers to the WMO codes used by the UI."""
+    if code is None:
+        return None
+    if code == 800:
+        return 0
+    if code == 801:
+        return 1
+    if code == 802:
+        return 2
+    if code in {803, 804}:
+        return 3
+    if 200 <= code <= 232:
+        return 95
+    if 300 <= code <= 321:
+        return 51 if code < 311 else 53
+    if code == 511:
+        return 66
+    if 500 <= code <= 504:
+        return {500: 61, 501: 63, 502: 65, 503: 65, 504: 65}[code]
+    if 520 <= code <= 531:
+        return 80 if code == 520 else (81 if code == 521 else 82)
+    if 600 <= code <= 622:
+        if code in {611, 612, 613, 615, 616}:
+            return 66
+        if code in {620, 621, 622}:
+            return 85 if code == 620 else 86
+        return 71 if code == 600 else (75 if code == 602 else 73)
+    if 700 <= code <= 781:
+        return 45
+    return None
+
+
+async def _openweather_live_forecast(httpx, latitude: float, longitude: float):
+    """Fetch and normalize OpenWeather current conditions and its 5-day forecast."""
+    if not settings.openweather_api_key:
+        return None
+    try:
+        params = {"lat": latitude, "lon": longitude, "appid": settings.openweather_api_key, "units": "metric"}
+        async with httpx.AsyncClient(timeout=15) as client:
+            current_response, forecast_response = await asyncio.gather(
+                client.get("https://api.openweathermap.org/data/2.5/weather", params=params),
+                client.get("https://api.openweathermap.org/data/2.5/forecast", params=params),
+            )
+            current_response.raise_for_status()
+            forecast_response.raise_for_status()
+            current_payload = current_response.json()
+            forecast_payload = forecast_response.json()
+
+        current_main = current_payload.get("main") or {}
+        current_weather = (current_payload.get("weather") or [{}])[0]
+        current_wind = current_payload.get("wind") or {}
+        current_clouds = current_payload.get("clouds") or {}
+        current_rain = current_payload.get("rain") or {}
+        current_snow = current_payload.get("snow") or {}
+
+        # OpenWeather's forecast is in 3-hour UTC intervals. Group by local
+        # India calendar day for the calendar and daily summary components.
+        by_day: dict[str, list[dict[str, Any]]] = {}
+        for interval in forecast_payload.get("list", []):
+            stamp = interval.get("dt")
+            if stamp is None:
+                continue
+            day = datetime.fromtimestamp(stamp, ZoneInfo("Asia/Kolkata")).date().isoformat()
+            by_day.setdefault(day, []).append(interval)
+
+        daily = {key: [] for key in (
+            "time", "weather_code", "temperature_2m_max", "temperature_2m_min",
+            "precipitation_sum", "precipitation_probability_max", "wind_speed_10m_max",
+            "shortwave_radiation_sum",
+        )}
+        for day, intervals in sorted(by_day.items()):
+            temps = [entry.get("main", {}).get("temp") for entry in intervals]
+            temps = [value for value in temps if value is not None]
+            rain_mm = sum((entry.get("rain") or {}).get("3h", 0) or 0 for entry in intervals)
+            rain_mm += sum((entry.get("snow") or {}).get("3h", 0) or 0 for entry in intervals)
+            representative = max(intervals, key=lambda entry: (entry.get("pop") or 0, (entry.get("rain") or {}).get("3h", 0) or 0))
+            representative_weather = (representative.get("weather") or [{}])[0]
+            daily["time"].append(day)
+            daily["weather_code"].append(_openweather_wmo_code(representative_weather.get("id")))
+            daily["temperature_2m_max"].append(max(temps) if temps else None)
+            daily["temperature_2m_min"].append(min(temps) if temps else None)
+            daily["precipitation_sum"].append(rain_mm)
+            daily["precipitation_probability_max"].append(round(max((entry.get("pop") or 0) for entry in intervals) * 100))
+            daily["wind_speed_10m_max"].append(max((entry.get("wind", {}).get("speed", 0) or 0) * 3.6 for entry in intervals))
+            daily["shortwave_radiation_sum"].append(None)
+
+        now = current_payload.get("dt")
+        forecast = {
+            "latitude": latitude, "longitude": longitude, "timezone": "Asia/Kolkata",
+            "current": {
+                "time": datetime.fromtimestamp(now, ZoneInfo("Asia/Kolkata")).isoformat() if now is not None else None,
+                "temperature_2m": current_main.get("temp"),
+                "relative_humidity_2m": current_main.get("humidity"),
+                "apparent_temperature": current_main.get("feels_like"),
+                "precipitation": current_rain.get("1h", 0) + current_snow.get("1h", 0),
+                "weather_code": _openweather_wmo_code(current_weather.get("id")),
+                "weather_description": current_weather.get("description"),
+                "wind_speed_10m": (current_wind.get("speed") * 3.6) if current_wind.get("speed") is not None else None,
+                "wind_direction_10m": current_wind.get("deg"),
+                "cloud_cover": current_clouds.get("all"),
+                "surface_pressure": current_main.get("pressure"),
+                "shortwave_radiation": None,
+                "soil_temperature_0cm": None,
+                "soil_moisture_0_to_1cm": None,
+                "soil_moisture_9_to_27cm": None,
+                "et0_fao_evapotranspiration": None,
+            },
+            "current_units": {
+                "temperature_2m": "°C", "relative_humidity_2m": "%",
+                "apparent_temperature": "°C", "precipitation": "mm",
+                "weather_code": "wmo code", "wind_speed_10m": "km/h",
+                "wind_direction_10m": "°", "cloud_cover": "%", "surface_pressure": "hPa",
+            },
+            "daily": daily,
+            "daily_units": {"temperature_2m_max": "°C", "temperature_2m_min": "°C",
+                            "precipitation_sum": "mm", "wind_speed_10m_max": "km/h"},
+        }
+        return forecast
+    except (httpx.HTTPError, ValueError, KeyError, TypeError, OverflowError) as exc:
+        logger.warning("OpenWeather fallback failed (%s)", type(exc).__name__)
+        return None
+
+
 @app.get("/api/v1/locations/{location_id}/live-weather")
 async def live_location_weather(location_id: str, include_seasonal: bool = Query(True)):
     """Fetch current conditions and a short provider forecast for a verified Bihar area."""
@@ -1303,12 +1427,17 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
     if not isinstance(forecast, dict) or not isinstance(forecast.get("current"), dict) or not isinstance(forecast.get("daily"), dict):
         forecast = None
     if forecast is None:
-        forecast = await _weatherapi_live_forecast(httpx, point.y, point.x)
+        forecast = await _openweather_live_forecast(httpx, point.y, point.x)
+        if forecast is not None:
+            provider = "OpenWeather"
+        else:
+            forecast = await _weatherapi_live_forecast(httpx, point.y, point.x)
+            if forecast is not None:
+                provider = "WeatherAPI.com"
         if forecast is None:
             if stale_payload is not None:
                 return {**stale_payload, "cache": "stale"}
-            raise HTTPException(503, "Live weather is unavailable from Open-Meteo and the configured fallback provider.")
-        provider = "WeatherAPI.com"
+            raise HTTPException(503, "Live weather is unavailable from Open-Meteo and configured fallback providers.")
     seasonal = None; seasonal_detail = None
     if include_seasonal and provider == "Open-Meteo":
         try:
@@ -1336,7 +1465,8 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
         except (httpx.HTTPError,ValueError) as exc:
             seasonal_detail=f"ECMWF EC46 long-range data unavailable: {exc}"
     else:
-        seasonal_detail="Seasonal ensemble was not requested for this current-conditions view."
+        seasonal_detail = ("Long-range seasonal ensemble is only available from Open-Meteo and was not returned by the active fallback provider."
+                           if include_seasonal else "Seasonal ensemble was not requested for this current-conditions view.")
     horizons=[]
     for days in ((7,14) if provider == "Open-Meteo" else ()):
         values=(forecast.get("daily") or {}).get("precipitation_sum") or []
@@ -1352,7 +1482,8 @@ async def live_location_weather(location_id: str, include_seasonal: bool = Query
             "latitude": point.y, "longitude": point.x}, "provider": provider, "forecast": forecast,
             "horizons": horizons,"seasonal_forecast":({"provider":"Open-Meteo ECMWF EC46","start":(seasonal.get("daily",{}).get("time") or [None])[0],"end":(seasonal.get("daily",{}).get("time") or [None])[-1]} if seasonal else None),"seasonal_detail":seasonal_detail,
             "retrieved_at": datetime.now(timezone.utc).isoformat(),
-            "detail": ("WeatherAPI current conditions and 3-day forecast at the verified area representative point. Soil, radiation, evapotranspiration and long-range outlook values are not supplied by this fallback." if provider == "WeatherAPI.com" else "Provider current conditions and 7-day forecast at the verified area representative point. These are not MAUSAM model predictions.")}
+            "detail": ({"WeatherAPI.com": "WeatherAPI current conditions and 3-day forecast at the verified area representative point. Soil, radiation, evapotranspiration and long-range outlook values are not supplied by this fallback.",
+                        "OpenWeather": "OpenWeather current conditions and up to 5-day forecast at the verified area representative point. Soil, radiation, evapotranspiration and long-range outlook values are not supplied by this fallback."}.get(provider, "Open-Meteo current conditions and 7-day forecast at the verified area representative point. These are not MAUSAM model predictions."))}
     cache[cache_key] = {"fetched_at": time.monotonic(), "payload": result}
     app.state.live_weather_cache = cache
     return {**result, "cache": "miss"}
