@@ -34,6 +34,7 @@ class Settings(BaseSettings):
     redis_url: str | None = None
     gemini_api_key: str | None = None
     gemini_model: str = "gemini-3.8-flash"
+    gemini_fallback_model: str = "gemini-3.6-flash"
     gemini_tts_model: str = "gemini-3.8-flash-lite-tts"
 
     @model_validator(mode="after")

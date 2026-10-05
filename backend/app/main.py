@@ -92,6 +92,37 @@ _assistant_speech_requests: dict[str, list[float]] = {}
 _farm_ai_requests: dict[str, list[float]] = {}
 
 
+async def _gemini_generate_content(httpx, *, system_instruction: str, contents: list[dict[str, Any]], generation_config: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    """Try the configured Gemini model, then a stable fallback on provider outages."""
+    models = list(dict.fromkeys((settings.gemini_model, settings.gemini_fallback_model)))
+    last_response = None
+    async with httpx.AsyncClient(timeout=35) as client:
+        for model_index, model in enumerate(models):
+            for attempt in range(2):
+                response = await client.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                    headers={"x-goog-api-key": settings.gemini_api_key, "Content-Type": "application/json"},
+                    json={
+                        "systemInstruction": {"parts": [{"text": system_instruction}]},
+                        "contents": contents,
+                        "generationConfig": generation_config,
+                    },
+                )
+                if response.status_code not in {500, 502, 503, 504}:
+                    response.raise_for_status()
+                    return response.json(), model
+                last_response = response
+                if attempt == 0:
+                    delay = 0.8 + random.uniform(0, 0.4)
+                    logger.warning("Gemini model %s returned HTTP %s; retrying in %.1fs", model, response.status_code, delay)
+                    await asyncio.sleep(delay)
+            if model_index < len(models) - 1:
+                logger.warning("Gemini model %s remains unavailable; trying configured fallback %s", model, models[model_index + 1])
+    if last_response is not None:
+        last_response.raise_for_status()
+    raise httpx.HTTPError("Gemini models are unavailable")
+
+
 def limit_farm_ai(user: dict) -> None:
     key = str(user.get("id", "unknown"))
     now = time.monotonic()
@@ -110,15 +141,12 @@ async def _gemini_short_answer(instructions: str, prompt: str, *, image: dict[st
     if image:
         parts.append({"inlineData": {"mimeType": image["mime_type"], "data": image["data"]}})
     try:
-        async with httpx.AsyncClient(timeout=45) as client:
-            response = await client.post(
-                f"https://generativelanguage.googleapis.com/v1beta/models/{settings.gemini_model}:generateContent",
-                headers={"x-goog-api-key": settings.gemini_api_key, "Content-Type": "application/json"},
-                json={"systemInstruction": {"parts": [{"text": instructions}]}, "contents": [{"role": "user", "parts": parts}],
-                      "generationConfig": {"maxOutputTokens": 500, "temperature": 0.25}},
-            )
-            response.raise_for_status()
-            payload = response.json()
+        payload, model = await _gemini_generate_content(
+            httpx,
+            system_instruction=instructions,
+            contents=[{"role": "user", "parts": parts}],
+            generation_config={"maxOutputTokens": 500, "temperature": 0.25},
+        )
         answer = "\n".join(p.get("text", "") for p in payload.get("candidates", [{}])[0].get("content", {}).get("parts", []) if p.get("text")).strip()
         if not answer:
             raise ValueError("Empty assistant response")
@@ -242,25 +270,12 @@ async def assistant_ask(request: AssistantAsk, http_request: Request):
             for turn in request.history[-6:]
         ]
         contents.append({"role": "user", "parts": [{"text": "\n\n".join(prompt_parts)}]})
-        async with httpx.AsyncClient(timeout=25) as client:
-            for attempt in range(3):
-                response = await client.post(
-                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-                    headers={"x-goog-api-key": api_key, "Content-Type": "application/json"},
-                    json={
-                        "systemInstruction": {"parts": [{"text": instructions}]},
-                        "contents": contents,
-                        "generationConfig": {"maxOutputTokens": 350, "temperature": 0.3},
-                    },
-                )
-                if response.status_code in {500, 502, 503, 504} and attempt < 2:
-                    delay = (2 ** attempt) + random.uniform(0, 0.4)
-                    logger.warning("Gemini returned HTTP %s; retrying assistant request in %.1fs", response.status_code, delay)
-                    await asyncio.sleep(delay)
-                    continue
-                response.raise_for_status()
-                payload = response.json()
-                break
+        payload, model = await _gemini_generate_content(
+            httpx,
+            system_instruction=instructions,
+            contents=contents,
+            generation_config={"maxOutputTokens": 350, "temperature": 0.3},
+        )
         candidates = payload.get("candidates", [])
         parts = candidates[0].get("content", {}).get("parts", []) if candidates else []
         answer = "\n".join(part.get("text", "") for part in parts if part.get("text") and not part.get("thought")).strip()
