@@ -94,6 +94,7 @@ _farm_ai_requests: dict[str, list[float]] = {}
 # the landing page). Keep one upstream request in flight per location per worker.
 _live_weather_locks: dict[str, asyncio.Lock] = {}
 _seasonal_weather_locks: dict[str, asyncio.Lock] = {}
+_map_weather_locks: dict[str, asyncio.Lock] = {}
 _open_meteo_request_lock = asyncio.Lock()
 _open_meteo_next_request_at = 0.0
 _LIVE_WEATHER_CACHE_TTL = 900
@@ -883,7 +884,7 @@ async def locations(level: str = Query("district", pattern="^(district|block|sub
 
 @app.get("/api/v1/map/weather")
 async def map_weather(district_id: str | None = None):
-    """Cached Open-Meteo forecast at verified block representative points."""
+    """Cached provider forecast at verified block representative points."""
     cache = getattr(app.state, "map_weather_cache", {})
     now = datetime.now(timezone.utc)
     key = (district_id or "all")
@@ -891,59 +892,84 @@ async def map_weather(district_id: str | None = None):
         selected = next((unit for unit in supported_national_locations() if unit.get("id") == district_id), None)
         if not selected or selected.get("level") != "district":
             raise HTTPException(404, "Choose one of the three supported Bihar districts.")
-    cached = cache.get(key)
-    if cached and (now - cached["fetched_at"]).total_seconds() < 900:
-        return {**cached["payload"], "cache": "hit"}
+    async with _weather_lock(_map_weather_locks, key):
+        cache = getattr(app.state, "map_weather_cache", {})
+        cached = cache.get(key)
+        if cached and (now - cached["fetched_at"]).total_seconds() < 4 * 60 * 60:
+            return {**cached["payload"], "cache": "hit"}
 
-    folder = Path(__file__).resolve().parents[1] / "data/geography/mausam/bihar"
-    try:
-        blocks = json.loads((folder / "blocks.geojson").read_text(encoding="utf-8"))["features"]
-        districts = json.loads((folder / "districts.geojson").read_text(encoding="utf-8"))["features"]
-        from shapely.geometry import shape
-        selected = []
-        requested_code = str(district_id or "").split("-")[-1]
-        for feature in blocks:
-            props = feature["properties"]
-            if district_id and str(props.get("district_code")) != requested_code:
-                continue
-            point = shape(feature["geometry"]).representative_point()
-            selected.append({"id": props["id"], "name": props["name"],
-                             "district": props.get("district"), "district_code": str(props.get("district_code")),
-                             "latitude": point.y, "longitude": point.x})
-        if not selected:
-            raise HTTPException(404, "No verified blocks were found for this district.")
-        import httpx
-        params = {
-            "latitude": ",".join(str(x["latitude"]) for x in selected),
-            "longitude": ",".join(str(x["longitude"]) for x in selected),
-            "current": "temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover",
-            "hourly": "temperature_2m,relative_humidity_2m,precipitation,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover",
-            "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max",
-            "forecast_days": 10, "timezone": "Asia/Kolkata", "wind_speed_unit": "kmh",
-        }
-        async with httpx.AsyncClient(timeout=35) as client:
-            response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
-            response.raise_for_status()
-            payloads = response.json()
-        if isinstance(payloads, dict):
-            payloads = [payloads]
-        if len(payloads) != len(selected):
-            raise HTTPException(502, "Weather provider returned an incomplete block response.")
-        records = []
-        for block, forecast in zip(selected, payloads):
-            records.append({**block, "forecast": forecast})
-        district_features = [f for f in districts if not district_id or str(f["properties"].get("lgd")) == requested_code or str(f["properties"].get("district_code")) == requested_code]
-        result = {"status": "available", "provider": "Open-Meteo", "retrieved_at": now.isoformat(),
-                  "spatial_method": "One Open-Meteo forecast grid value at each supplied block polygon representative point; block choropleth only, not observed rainfall or an interpolated raster.",
-                  "records": records,
-                  "districts": [{"id": f["properties"]["id"], "name": f["properties"]["name"]} for f in district_features]}
-        cache[key] = {"fetched_at": now, "payload": result}
-        app.state.map_weather_cache = cache
-        return {**result, "cache": "miss"}
-    except HTTPException:
-        raise
-    except Exception as exc:
-        raise HTTPException(503, f"Block forecast unavailable from Open-Meteo: {exc}") from exc
+        folder = Path(__file__).resolve().parents[1] / "data/geography/mausam/bihar"
+        try:
+            blocks = json.loads((folder / "blocks.geojson").read_text(encoding="utf-8"))["features"]
+            districts = json.loads((folder / "districts.geojson").read_text(encoding="utf-8"))["features"]
+            from shapely.geometry import shape
+            selected = []
+            requested_code = str(district_id or "").split("-")[-1]
+            for feature in blocks:
+                props = feature["properties"]
+                if district_id and str(props.get("district_code")) != requested_code:
+                    continue
+                point = shape(feature["geometry"]).representative_point()
+                selected.append({"id": props["id"], "name": props["name"],
+                                 "district": props.get("district"), "district_code": str(props.get("district_code")),
+                                 "latitude": point.y, "longitude": point.x})
+            if not selected:
+                raise HTTPException(404, "No verified blocks were found for this district.")
+            import httpx
+            params = {
+                "latitude": ",".join(str(x["latitude"]) for x in selected),
+                "longitude": ",".join(str(x["longitude"]) for x in selected),
+                "current": "temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover",
+                "hourly": "temperature_2m,relative_humidity_2m,precipitation,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover",
+                "daily": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,wind_speed_10m_max",
+                "forecast_days": 10, "timezone": "Asia/Kolkata", "wind_speed_unit": "kmh",
+            }
+            provider = "Open-Meteo"
+            records = []
+            try:
+                async with httpx.AsyncClient(timeout=35) as client:
+                    response = await client.get("https://api.open-meteo.com/v1/forecast", params=params)
+                    response.raise_for_status()
+                    payloads = response.json()
+                if isinstance(payloads, dict):
+                    payloads = [payloads]
+                if len(payloads) != len(selected):
+                    raise ValueError("Weather provider returned an incomplete block response.")
+                records = [{**block, "forecast": forecast} for block, forecast in zip(selected, payloads)]
+            except Exception as open_meteo_error:
+                # A single bulk request is efficient, but the public Open-Meteo
+                # endpoint can throttle the Render host. Reuse the same verified
+                # block points with the already configured OpenWeather fallback.
+                if not settings.openweather_api_key:
+                    raise HTTPException(503, "Block forecast providers are unavailable. Try again later.") from open_meteo_error
+                provider = "OpenWeather"
+                semaphore = asyncio.Semaphore(4)
+
+                async def fetch_openweather(block):
+                    async with semaphore:
+                        forecast = await _openweather_live_forecast(httpx, block["latitude"], block["longitude"])
+                    return {**block, "forecast": forecast} if forecast else None
+
+                records = [record for record in await asyncio.gather(*(fetch_openweather(block) for block in selected)) if record]
+                if not records:
+                    logger.warning("Map weather providers failed for all %s requested blocks", len(selected))
+                    raise HTTPException(503, "Block weather is temporarily unavailable from both providers.") from open_meteo_error
+
+            district_features = [f for f in districts if not district_id or str(f["properties"].get("lgd")) == requested_code or str(f["properties"].get("district_code")) == requested_code]
+            result = {"status": "available" if len(records) == len(selected) else "partial",
+                      "provider": provider, "retrieved_at": now.isoformat(),
+                      "record_count": len(records), "expected_record_count": len(selected),
+                      "spatial_method": "One provider forecast grid value at each supplied block polygon representative point; block choropleth only, not observed rainfall or an interpolated raster.",
+                      "records": records,
+                      "districts": [{"id": f["properties"]["id"], "name": f["properties"]["name"]} for f in district_features]}
+            cache[key] = {"fetched_at": now, "payload": result}
+            app.state.map_weather_cache = cache
+            return {**result, "cache": "miss"}
+        except HTTPException:
+            raise
+        except Exception as exc:
+            logger.warning("Block map forecast failed (%s)", type(exc).__name__)
+            raise HTTPException(503, "Block weather is temporarily unavailable from the configured providers.") from exc
 
 
 @app.get("/api/v1/map/locations")
@@ -1279,6 +1305,31 @@ async def _openweather_live_forecast(httpx, latitude: float, longitude: float):
             daily["wind_speed_10m_max"].append(max((entry.get("wind", {}).get("speed", 0) or 0) * 3.6 for entry in intervals))
             daily["shortwave_radiation_sum"].append(None)
 
+        forecast_intervals = sorted(forecast_payload.get("list", []), key=lambda entry: entry.get("dt", 0))
+        hourly = {key: [] for key in (
+            "time", "temperature_2m", "relative_humidity_2m", "precipitation",
+            "precipitation_probability", "weather_code", "wind_speed_10m",
+            "wind_direction_10m", "cloud_cover",
+        )}
+        for entry in forecast_intervals:
+            stamp = entry.get("dt")
+            if stamp is None:
+                continue
+            main = entry.get("main") or {}
+            weather = (entry.get("weather") or [{}])[0]
+            wind = entry.get("wind") or {}
+            rain = entry.get("rain") or {}
+            snow = entry.get("snow") or {}
+            hourly["time"].append(datetime.fromtimestamp(stamp, ZoneInfo("Asia/Kolkata")).isoformat())
+            hourly["temperature_2m"].append(main.get("temp"))
+            hourly["relative_humidity_2m"].append(main.get("humidity"))
+            hourly["precipitation"].append((rain.get("3h", 0) or 0) + (snow.get("3h", 0) or 0))
+            hourly["precipitation_probability"].append(round((entry.get("pop") or 0) * 100))
+            hourly["weather_code"].append(_openweather_wmo_code(weather.get("id")))
+            hourly["wind_speed_10m"].append((wind.get("speed") * 3.6) if wind.get("speed") is not None else None)
+            hourly["wind_direction_10m"].append(wind.get("deg"))
+            hourly["cloud_cover"].append((entry.get("clouds") or {}).get("all"))
+
         now = current_payload.get("dt")
         forecast = {
             "latitude": latitude, "longitude": longitude, "timezone": "Asia/Kolkata",
@@ -1306,6 +1357,14 @@ async def _openweather_live_forecast(httpx, latitude: float, longitude: float):
                 "weather_code": "wmo code", "wind_speed_10m": "km/h",
                 "wind_direction_10m": "°", "cloud_cover": "%", "surface_pressure": "hPa",
             },
+            "hourly": hourly,
+            "hourly_units": {
+                "temperature_2m": "°C", "relative_humidity_2m": "%",
+                "precipitation": "mm/3h", "precipitation_probability": "%",
+                "weather_code": "wmo code", "wind_speed_10m": "km/h",
+                "wind_direction_10m": "°", "cloud_cover": "%",
+            },
+            "resolution_hours": 3,
             "daily": daily,
             "daily_units": {"temperature_2m_max": "°C", "temperature_2m_min": "°C",
                             "precipitation_sum": "mm", "wind_speed_10m_max": "km/h"},
